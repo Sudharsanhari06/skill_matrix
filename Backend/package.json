@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "dev": "node ./src/server.js"
   },
   "keywords": [],
   "author": "",
@@ -13,8 +14,12 @@
   "description": "",
   "dependencies": {
     "@hapi/hapi": "^21.4.0",
+    "bcrypt": "^6.0.0",
+    "boom": "^7.3.0",
     "dotenv": "^16.5.0",
+    "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.14.1",
+    "nodemon": "^3.1.10",
     "reflect-metadata": "^0.2.2",
     "typeorm": "^0.3.24"
   }
