@@ -23,6 +23,11 @@ export const Team = new EntitySchema({
         }
     },
     relations: {
+        members: {
+            type: 'one-to-many',
+            target: 'Employee',
+            inverseSide: 'team'
+        },
         lead: {
             type: "many-to-one",
             target: "Employee",
@@ -30,3 +35,4 @@ export const Team = new EntitySchema({
         }
     }
 });
+

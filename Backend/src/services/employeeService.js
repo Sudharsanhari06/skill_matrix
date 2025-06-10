@@ -1,12 +1,16 @@
 import { AppDataSource } from "../config/database.js";
 import bcrypt from 'bcrypt';
 import { Employee } from "../entities/Employee.js";
+import { EmployeeCategoryAssociation } from "../entities/EmployeeCategoryAssociation.js";
+
 
 const employeeRepo = AppDataSource.getRepository(Employee);
-export const addEmployee = async (employee_name, email, password, role_id, team_id) => {
-    console.log("email", email);
-    const existingEmployee = await employeeRepo.findOneBy({ email });
+const categoryAssociationRepo = AppDataSource.getRepository(EmployeeCategoryAssociation);
 
+export const addEmployee = async (employee_name, email, password, role_id, team_id, categories) => {
+    console.log("email", email);
+
+    const existingEmployee = await employeeRepo.findOneBy({ email });
     if (existingEmployee) {
         throw new Error('Email already exists')
     }
@@ -21,9 +25,18 @@ export const addEmployee = async (employee_name, email, password, role_id, team_
         is_active: true
     })
 
-    const result = employeeRepo.save(employee);
+    const result = await employeeRepo.save(employee);
+    
+    const association = categories.map(cat => categoryAssociationRepo.create({
+        employee: { employee_id: result.employee_id },
+        category: { category_id: cat.category_id },
+        is_primary: cat.is_primary,
+    }))
+
+    await categoryAssociationRepo.save(association);
     return result;
 }
+
 
 export const getAllEmployees = async () => {
     return await employeeRepo.find({

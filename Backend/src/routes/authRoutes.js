@@ -3,7 +3,7 @@ import { verifyToken } from '../middleware/authMiddleware.js';
 
 
 export const authRoutes = [
-    // done
+    
     {
         method: 'POST',
         path: '/api/login',

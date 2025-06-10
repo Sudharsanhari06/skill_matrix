@@ -23,12 +23,13 @@ export const Employee = new EntitySchema({
             type: 'varchar',
             nullable: true
         },
-        role_id: { 
-            type: "int" 
+        role_id: {
+            type: "int"
         },
         team_id: {
-             type: "int",
-              nullable: true },
+            type: "int",
+            nullable: true
+        },
         is_active: {
             type: "boolean",
             default: true,
@@ -45,7 +46,7 @@ export const Employee = new EntitySchema({
             joinColumn: { name: "role_id" },
             nullable: false
         },
-        team:{
+        team: {
             type: 'many-to-one',
             target: 'Team',
             joinColumn: { name: "team_id" },

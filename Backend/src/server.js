@@ -5,26 +5,26 @@ import { AppDataSource } from './config/database.js';
 import { authRoutes } from './routes/authRoutes.js';
 import { employeeRoute } from './routes/employeeRoute.js';
 import { teamRoutes } from './routes/teamRoute.js';
+import { adminRouts } from './routes/adminRoutes.js';
 
 const init = async () => {
-    const server = Hapi.server({
-      port: process.env.PORT ,
-      host: process.env.DB_HOST,
-    });
+  const server = Hapi.server({
+    port: process.env.PORT,
+    host: process.env.DB_HOST,
+  });
 
-    try {
-
-      await AppDataSource.initialize();
-      console.log('Data Source initialized');
+  try {
+    await AppDataSource.initialize();
+    console.log('Data Source initialized');
     server.route(authRoutes);
     server.route(employeeRoute);
-    server.route(teamRoutes)
+    server.route(teamRoutes);
+    server.route(adminRouts);
 
-      await server.start();
-      console.log(`Server running at: ${server.info.uri}`);
-    } catch (error) {
-      console.error('Failed to initialize Data Source or start server:', error);
-    }
-  };  
+    await server.start();
+    console.log(`Server running at: ${server.info.uri}`);
+  } catch (error) {
+    console.error('Failed to initialize Data Source or start server:', error);
+  }
+};
 init();
-  
