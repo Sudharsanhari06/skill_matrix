@@ -21,6 +21,14 @@ export const Assessment = new EntitySchema({
         status: {
             type: "int"
         },
+        lead_comments: {
+            type: "text",
+            nullable: true
+        },
+        hr_approve: {
+            type: "boolean",
+            default: false
+        },
         is_active: {
             type: "boolean",
             default: true
@@ -40,7 +48,17 @@ export const Assessment = new EntitySchema({
             type: "many-to-one",
             target: "Employee",
             joinColumn: { name: "employee_id" }
+        },
+        skillMatrix: {
+            type: "one-to-many",
+            target: "SkillMatrix",
+            inverseSide: "assessment",
+            cascade: true
         }
     },
-    uniques: [{ columns: ["employee_id", "quarter", "year"] }]
+    uniques: [{
+        columns: ["employee_id",
+            "quarter",
+            "year"]
+    }]
 });

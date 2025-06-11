@@ -11,7 +11,7 @@ export const verifyToken = async (request, h) => {
     const token = authHeader.split(' ')[1];
     try {
         const decoded = jwt.verify(token, process.env.SECRET_KEY);
-        request.auth = decoded;  
+        request.auth = decoded;
         return h.continue;
     } catch (err) {
         throw Boom.unauthorized('Invalid or expired token');
@@ -21,12 +21,11 @@ export const verifyToken = async (request, h) => {
 export const allowRoles = (...rolesAllowed) => {
     return async (request, h) => {
         const user = request.auth;
-        console.log("user",user);
+        console.log("user", user);
 
         if (!rolesAllowed.includes(user.role.role_name)) {
             return h.response({ error: 'Access denied' }).code(403).takeover();
         }
-
         return h.continue;
     };
 };

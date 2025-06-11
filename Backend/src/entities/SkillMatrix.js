@@ -27,18 +27,6 @@ export const SkillMatrix = new EntitySchema({
             type: "int",
             nullable: true
         },
-        lead_comments: {
-            type: "text",
-            nullable: true
-        },
-        hr_approve: {
-            type: "boolean",
-            default: false
-        },
-        hr_comments: {
-            type: "text",
-            nullable: true
-        },
         created_at: {
             type: "timestamp",
             default: () => "CURRENT_TIMESTAMP"
@@ -53,7 +41,8 @@ export const SkillMatrix = new EntitySchema({
         assessment: {
             type: "many-to-one",
             target: "Assessment",
-            joinColumn: { name: "assessment_id" }
+            joinColumn: { name: "assessment_id" },
+            inverseSide: "skillMatrix"
         },
         skill: {
             type: "many-to-one",
@@ -61,5 +50,8 @@ export const SkillMatrix = new EntitySchema({
             joinColumn: { name: "skill_id" }
         }
     },
-    uniques: [{ columns: ["assessment_id", "skill_id"] }]
+    uniques: [{
+        columns:
+            ["assessment_id", "skill_id"]
+    }]
 });

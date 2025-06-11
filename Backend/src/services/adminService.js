@@ -23,15 +23,15 @@ export const getAllTeams = async () => {
     });
 }
 
-export const getAllEmployeeswithTeamId=async(teamId)=>{
+export const getAllEmployeeswithTeamId = async (teamId) => {
     const employees = await employeeRepo.find({
         where: {
-          team: { team_id: teamId },
-          is_active: true
+            team: { team_id: teamId },
+            is_active: true
         },
         relations: ['team', 'role']
-      })
-      return employees;
+    })
+    return employees;
 }
 
 
@@ -92,3 +92,59 @@ export const initiateAssessmentCycle = async (quarter, year) => {
 
     return assessments;
 };
+
+
+
+export const getSkillMatrixForHrReview = async (hrId) => {
+    const results = await assessmentRepo.find({
+        where: {
+            status: 2,
+            employee: {
+                hr_id: hrId
+            }
+        },
+        relations: ['employee', 'skillMatrix', 'skillMatrix.skill']
+    });
+    console.log("results", results);
+
+    return results.map(assessment => ({
+        assessment_id: assessment.assessment_id,
+        lead_comments: assessment.lead_comments,
+        employee: {
+            id: assessment.employee.employee_id,
+            name: assessment.employee.employee_name
+        },
+        skills: assessment.skillMatrix.map(skillEntry => ({
+            skill_id: skillEntry.skill.skill_id,
+            skill_name: skillEntry.skill.skill_name,
+            employee_rating: skillEntry.employee_rating,
+            lead_rating: skillEntry.lead_rating
+        }))
+    }));
+};
+
+export const skillMatrixApproveHr = async (assessment_id, hr_id) => {
+
+    const existing = await assessmentRepo.findOne({
+        where: {
+            assessment_id,
+            status: 2
+        },
+        relations: ['employee']
+    });
+    if (!existing) {
+        throw new Error('Assessment not found');
+    }
+    if (existing.employee.hr_id !== hr_id){
+        throw new Error('Unauthorized: You cannot approve this assessment');
+    }
+
+        await assessmentRepo.update(
+            { assessment_id },
+            {
+                hr_approve: true,
+                status: 3
+            }
+        );
+
+}

@@ -22,5 +22,24 @@ export const employeeRoute=[
             ]
         },
         handler:employeeController.getAllEmployees
+    },
+    // to view the skill matrix for emploee
+    {
+        method: 'GET',
+        path: '/employee/skills/view',
+        options: {
+          pre: [{ method: verifyToken }]
+        },
+        handler: employeeController.getCurrentSkillMatrixByEmployeeId
+     
+    }, // to submit the skill matrix employee id
+    {
+        method: 'POST',
+        path: '/employee/skills/rate',
+        options: {
+          pre: [{ method: verifyToken }]
+        },
+        handler: employeeController.submitEmployeeSkillRatings
+      
     }
 ]

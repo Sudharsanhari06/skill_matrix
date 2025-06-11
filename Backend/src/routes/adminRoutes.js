@@ -1,5 +1,5 @@
 import * as adminController from '../controllers/adminController.js';
-import { verifyToken } from '../middleware/authMiddleware.js';
+import { verifyToken, allowRoles } from '../middleware/authMiddleware.js';
 
 export const adminRouts = [
     {
@@ -7,10 +7,11 @@ export const adminRouts = [
         path: '/teams',
         options: {
             pre: [
-                { method: verifyToken }
+                { method: verifyToken },
+                { method: allowRoles('hr') }
             ]
         },
-        handler:adminController.getAllTeams
+        handler: adminController.getAllTeams
     },
     //hr see the each team employee
     {
@@ -18,20 +19,45 @@ export const adminRouts = [
         path: '/teams/{team_id}/employees',
         options: {
             pre: [
-                { method: verifyToken }
+                { method: verifyToken },
+                { method: allowRoles('hr') }
+
             ]
         },
         handler: adminController.getAllEmployeeswithTeamId
     },
-    
+
     {
         method: 'POST',
         path: '/assessments/initiate',
         options: {
             pre: [
-                { method: verifyToken }
+                { method: verifyToken },
+                { method: allowRoles('hr') }
             ]
         },
         handler: adminController.initiateAssessmentCycle
+    }
+    // to view the skill matrix hr
+    , {
+        method: 'GET',
+        path: '/hr/skill-matrix-view/employee-lead-update',
+        options: {
+            pre: [{ method: verifyToken },
+                { method: allowRoles('hr') }
+            ]
+        },
+        handler: adminController.getSkillMatrixForHrReview
+    },
+    {
+        method: 'PUT',
+        path: '/hr/skill-matrix-view/{assessment_id}/approve',
+        options: {
+            pre: [
+                { method: verifyToken },
+                { method: allowRoles('hr') }
+            ]
+        },
+        handler: adminController.skillMatrixApproveHr
     }
 ]

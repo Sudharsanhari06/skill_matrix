@@ -17,17 +17,16 @@ export const login = async (request, h) => {
         where:{email},
         relations:['role','team'],
     });
-
     console.log("user",user);
 
     if (!user) {
         return h.response({ message:'User not found' }).code(404);
     }
     
-    // const isMatch = await bcrypt.compare(password, user.password);
-    // if (!isMatch) {
-    //     return h.response({ message: 'Invalid credentials' }).code(401);
-    // }
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+        return h.response({ message: 'Invalid credentials' }).code(401);
+    }
 
     const payload = {
         employee_id: user.employee_id,

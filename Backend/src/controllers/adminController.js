@@ -49,6 +49,31 @@ export const initiateAssessmentCycle = async (request, h) => {
   };
 
 
+  export const getSkillMatrixForHrReview = async (request, h) => {
+    try {
+        const hrId=request.auth.employee_id;
+        console.log("hrId",hrId);
+
+        const result = await adminService.getSkillMatrixForHrReview(hrId);
+        return h.response({ message: "Success", data: result }).code(200);
+    } catch (error) {
+        console.error("Error fetching skill matrix for review", error);
+        return h.response({ message: "Internal Server Error", error }).code(500);
+    }
+};
 
 
   
+export const skillMatrixApproveHr=async(request,h)=>{
+    try{
+        const hrId=request.auth.employee_id
+        const{assessment_id}=request.params;
+
+        const result=await adminService.skillMatrixApproveHr(assessment_id,hrId)
+        return h.response({ message: 'HR approval successful' }).code(200);   return h.response({message: "Success", data: result }).code(200);
+    }catch(error){
+        
+    console.error("Error approving assessment by HR:", error);
+        return h.response({ message:error.message || "Internal Server Error", error }).code(500);
+    }
+}
