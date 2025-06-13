@@ -40,7 +40,7 @@ export const login = async (request, h) => {
     return h.response({
         message: 'Login successful',
         token,
-        // is_first_login: user.is_first_login
+        user
     }).code(200);
 };
 
