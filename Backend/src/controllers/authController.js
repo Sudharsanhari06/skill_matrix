@@ -3,39 +3,39 @@ import jwt from 'jsonwebtoken';
 import { AppDataSource } from '../config/database.js';
 import { Employee } from '../entities/Employee.js';
 import dotenv from 'dotenv';
-import { Team } from '../entities/Team.js';
+// import { Team } from '../entities/Team.js';
 dotenv.config();
 
 export const login = async (request, h) => {
 
     const { email, password } = request.payload;
-    console.log("email, password ",email, password);
+    console.log("email, password ", email, password);
 
     const employeeRepo = AppDataSource.getRepository(Employee);
-    
-    const user = await employeeRepo.findOne({  
-        where:{email},
-        relations:['role','team'],
-    });
-    console.log("user",user);
 
-    if (!user) {
-        return h.response({ message:'User not found' }).code(404);
+    const emploee = await employeeRepo.findOne({
+        where: { email },
+        relations: ['role', 'team'],
+    });
+    console.log("emploee", emploee);
+
+    if (!emploee) {
+        return h.response({ message: 'User not found' }).code(404);
     }
-    
-    const isMatch = await bcrypt.compare(password, user.password);
+
+    const isMatch = await bcrypt.compare(password, emploee.password);
     if (!isMatch) {
         return h.response({ message: 'Invalid credentials' }).code(401);
     }
 
-    const payload = {
-        employee_id: user.employee_id,
-        name: user.name,
-        role: user.role,
-        team:user.team
+    const user = {
+        employee_id: emploee.employee_id,
+        name: emploee.employee_name,
+        role: emploee.role,
+        team: emploee.team
     };
 
-    const token = jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: '1d' });
+    const token = jwt.sign(user, process.env.SECRET_KEY, { expiresIn: '1d' });
 
     return h.response({
         message: 'Login successful',
@@ -52,7 +52,7 @@ export const changePassword = async (request, h) => {
 
     try {
         const employeeRepo = AppDataSource.getRepository(Employee);
-        
+
         const user = await employeeRepo.findOneBy({ employee_id: employeeId });
 
         if (!user) {

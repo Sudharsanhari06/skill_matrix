@@ -19,7 +19,7 @@ const skillRepo = AppDataSource.getRepository(Skill);
 
 export const getAllTeams = async () => {
     return await teamRepo.find({
-        relations: ['lead']
+        relations: ['lead','members','members.role']
     });
 }
 

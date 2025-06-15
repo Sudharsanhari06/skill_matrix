@@ -80,6 +80,18 @@
     transition: border 0.3s;
     background-color: transparent;
 }
+.password input{
+    border: 0;
+}
+.password{
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    padding-right: 0.5rem;
+    font-size: 1.3rem;
+    cursor: pointer;
+}
 
 .login-form input:focus {
     border-color: var(--bg-color);
@@ -99,6 +111,7 @@
     border: none;
     cursor: pointer;
 }
+
 .error-text{
     margin: 0.4rem 0 0 0.3rem;
     color: red;

@@ -1,21 +1,22 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { loginStart, loginSuccess, loginFailure } from '../slices/auth/authSlice';
-import { FaUser } from "react-icons/fa";
-import { toast} from 'react-toastify';
+import { FaUser, FaEye, FaEyeSlash } from "react-icons/fa";
+import { toast } from 'react-toastify';
 import '../styles/loginform.css';
 import { useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
-const navigate=useNavigate();
+    const navigate = useNavigate();
 
     const dispatch = useDispatch();
     const { loading, error } = useSelector((state) => state.auth);
-
+    
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [emailError, setEmailError] = useState('');
     const [passwordError, setPasswordError] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
 
     const handleLogin = async (e) => {
         e.preventDefault();
@@ -51,25 +52,23 @@ const navigate=useNavigate();
             });
 
             const data = await response.json();
-            console.log("Login data",data);
+            console.log("Login data", data);
 
             if (response.ok) {
                 const { token, user } = data;
-                console.log("user data ",user)
+                console.log("user data ", user)
                 localStorage.setItem('token', token);
-                localStorage.setItem('users',user);
-                
-                localStorage.setItem('userID',data.user.employee_id);
+                localStorage.setItem('user', JSON.stringify(user));
                 // console.log("user and token",data.user,data.token)
-                dispatch(loginSuccess({user:data.user,token:data.token}));
+                dispatch(loginSuccess({ user: data.user, token: data.token }));
                 toast.success('Login Successful');
                 navigate('/dashboard');
             }
-            else{
+            else {
                 throw new Error(data.message || 'Login failed');
 
             }
-            
+
         } catch (err) {
             dispatch(loginFailure(err.message));
         }
@@ -98,13 +97,19 @@ const navigate=useNavigate();
                 {emailError && <p className="error-text">{emailError}</p>}
 
                 <label htmlFor="password">PASSWORD</label>
-                <input
-                    type="password"
-                    placeholder="Password"
-                    name='password'
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                />
+                <div className='password'>
+                    <input
+                        type={showPassword ? 'text' : 'password'}
+                        placeholder="Password"
+                        name='password'
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                    <span onClick={() => setShowPassword(!showPassword)}>
+                        {showPassword ? <FaEye /> : <FaEyeSlash />}
+                    </span>
+                </div>
+
                 {passwordError && <p className="error-text">{passwordError}</p>}
 
 
