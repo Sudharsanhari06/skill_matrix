@@ -5,17 +5,28 @@ import { Employee } from "../entities/Employee.js";
 import { EmployeeCategoryAssociation } from "../entities/EmployeeCategoryAssociation.js";
 import { Assessment } from '../entities/Assessment.js';
 import { SkillMatrix } from '../entities/SkillMatrix.js';
+import {Role} from '../entities/Role.js'
+import {Category} from '../entities/Category.js';
+import { Team } from "../entities/Team.js";
+
 
 const assessmentRepo = AppDataSource.getRepository(Assessment);
+const roleRepo=AppDataSource.getRepository(Role)
 
 const skillMatrixRepo = AppDataSource.getRepository(SkillMatrix);
 
 const employeeRepo = AppDataSource.getRepository(Employee);
 
+const teamRepo=AppDataSource.getRepository(Team);
+
+
 const categoryAssociationRepo = AppDataSource.getRepository(EmployeeCategoryAssociation);
 
+const categoryRepo=AppDataSource.getRepository(Category);
 
-export const addEmployee = async (employee_name, email, password, role_id, team_id, categories) => {
+
+
+export const addEmployee = async (employee_name, email, password, role_id, team_id, hr_id,categories) => {
     console.log("email", email);
 
     const existingEmployee = await employeeRepo.findOneBy({ email });
@@ -30,6 +41,7 @@ export const addEmployee = async (employee_name, email, password, role_id, team_
         password: hashedPassword,
         role_id,
         team_id,
+        hr_id,
         is_active: true
     })
 
@@ -54,6 +66,24 @@ export const getAllEmployees = async () => {
     });
 }
 
+export const getAllRoles=async()=>{
+    return roleRepo.find();
+}
+
+export const getAllCategory=async()=>{
+    return await categoryRepo.find();
+}
+
+export const getAllTeamsNames=async()=>{
+    return await teamRepo.find();
+}
+
+export const getAllHrNames=async()=>{
+    const result =await employeeRepo.find({
+        where:{role_id:2},
+    })
+    return result;
+}
 
 // view the skill matrix for employee
 
@@ -86,13 +116,8 @@ export const getCurrentSkillMatrixByEmployeeId = async (employeeId) => {
         },
         relations: ['skill']
     });
-
-
     return skillMatrix;
 };
-
-
-
 
 
 export const submitEmployeeSkillRatings = async (employeeId, ratings) => {

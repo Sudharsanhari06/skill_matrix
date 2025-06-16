@@ -16,7 +16,7 @@ const TeamEmployeeList = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-
+        
         if (!response.ok) {
           throw new Error('Failed to fetch teams');
         }

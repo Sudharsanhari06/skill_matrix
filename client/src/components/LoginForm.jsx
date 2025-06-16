@@ -11,7 +11,6 @@ const LoginForm = () => {
 
     const dispatch = useDispatch();
     const { loading, error } = useSelector((state) => state.auth);
-    
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [emailError, setEmailError] = useState('');
@@ -35,11 +34,9 @@ const LoginForm = () => {
             setPasswordError('Password is required');
             valid = false;
         }
-
         if (!valid) {
-            return; // Stop submission if validation fails
+            return;
         }
-
         dispatch(loginStart());
 
         try {

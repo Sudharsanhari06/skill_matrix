@@ -13,6 +13,7 @@ export const adminRouts = [
         },
         handler: adminController.getAllTeams
     },
+
     //hr see the each team employee
     {
         method: 'GET',

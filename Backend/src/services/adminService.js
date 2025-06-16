@@ -94,7 +94,6 @@ export const initiateAssessmentCycle = async (quarter, year) => {
 };
 
 
-
 export const getSkillMatrixForHrReview = async (hrId) => {
     const results = await assessmentRepo.find({
         where: {

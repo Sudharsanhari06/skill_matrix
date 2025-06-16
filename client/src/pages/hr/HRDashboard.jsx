@@ -1,6 +1,6 @@
 import React from 'react'
 
- const HrDashboard = () => {
+const HrDashboard = () => {
   return (
     <div>HrDashboard</div>
   )

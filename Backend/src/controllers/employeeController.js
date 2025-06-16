@@ -1,10 +1,10 @@
 import * as emploeeService from '../services/employeeService.js';
 
 export const addEmployee = async (request, h) => {
-    const { employee_name, email, password, role_id, team_id, categories } = request.payload;
+    const { employee_name, email, password, role_id, team_id, hr_id,categories } = request.payload;
 
     try {
-        const result = emploeeService.addEmployee(employee_name, email, password, role_id, team_id, categories);
+        const result = emploeeService.addEmployee(employee_name, email, password, role_id, team_id, hr_id,categories);
 
         return h.response({ message: 'Successfully added the employee', employee_id: result.employee_id }).code(200);
 
@@ -18,6 +18,49 @@ export const addEmployee = async (request, h) => {
     }
 
 }
+
+export const getAllRoles=async(request,h)=>{
+    try{
+        const result =await emploeeService.getAllRoles();
+        return h.response({message:'Successfully get the Roles',result}).code(200)
+    }catch(error){
+        console.error("Internal server error",error);
+        return h.response({message:'Internal server error'}).code(500);
+    }
+}
+
+export const getAllCategory=async(request,h)=>{
+    try{
+        const result =await emploeeService.getAllCategory();
+        return h.response({message:'Successfully get the Roles',result}).code(200)
+    }catch(error){
+        console.error("Internal server error",error);
+        return h.response({message:'Internal server error'}).code(500);
+    }
+}
+
+export const getAllTeamsNames=async(request,h)=>{
+    try{
+        const result =await emploeeService.getAllTeamsNames();
+        return h.response({message:'Successfully get the Roles',result}).code(200)
+    }catch(error){
+        console.error("Internal server error",error);
+        return h.response({message:'Internal server error'}).code(500);
+    }   
+}
+
+export const getAllHrNames=async(request,h)=>{
+
+    try{
+        const result =await emploeeService.getAllHrNames();
+        return h.response({message:'Successfully get the Roles',result}).code(200);
+    }catch(error){
+        console.error("Internal server error",error);
+        return h.response({message:'Internal server error'}).code(500);
+    }   
+}
+
+
 
 export const getAllEmployees = async (request, h) => {
     try {

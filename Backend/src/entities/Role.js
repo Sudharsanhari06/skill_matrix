@@ -7,4 +7,5 @@ export const Role = new EntitySchema({
     role_id: { primary: true, type: "int", generated: true },
     role_name: { type: "varchar", length: 100 }
   }
+  
 });

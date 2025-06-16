@@ -2,9 +2,11 @@ import React from 'react';
 import { ToastContainer } from 'react-toastify';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+// import './index.css';
 
 import LoginForm from './components/LoginForm';
-import Sidebar from './components/Sidebar';
+// import Sidebar from './components/Sidebar';
+import Layout from './components/Layout';
 
 import EmployeeDashboard from './pages/employee/EmployeeDashboard';
 import SkillMatrixForm from './pages/employee/SkillMatrixForm';
@@ -18,12 +20,6 @@ import InitiateAssessment from './pages/hr/InitiateAssessment';
 import CreateEmployee from './pages/hr/CreateEmployee';
 import TeamEmployeeList from './pages/hr/TeamEmployeeList';
 
-const Layout = ({ children }) => (
-  <div style={{ display: 'flex' }}>
-    <Sidebar />
-    <main style={{ flex: 1, padding: '1rem' }}>{children}</main>
-  </div>
-);
 
 const App = () => {
   const user = useSelector((state) => state.auth.user);
@@ -34,15 +30,12 @@ const App = () => {
       <ToastContainer />
       <Routes>
         <Route path="/login" element={<LoginForm />} />
-
-        {/* Role-Based Routes */}
         {user && (
           <Route
             path="/"
             element={
               <Layout>
-                {/* Default dashboard based on role */}
-                {role === 'employee' && <EmployeeDashboard/>}
+                {role === 'employee' && <EmployeeDashboard />}
                 {role === 'lead' && <LeadDashboard />}
                 {role === 'hr' && <HrDashboard />}
               </Layout>
@@ -64,7 +57,7 @@ const App = () => {
           </>
         )}
 
-        {/* Lead Routes */}
+   
         {role === 'lead' && (
           <>
             <Route

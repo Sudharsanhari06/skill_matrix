@@ -1,10 +1,10 @@
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { LuLayoutDashboard } from "react-icons/lu";
 import {
-    FaTachometerAlt,
     FaClipboardList,
-    FaUserCheck,
+    FaUsers,
     FaSignOutAlt,
     FaUserPlus,
 } from 'react-icons/fa';
@@ -17,7 +17,7 @@ const Sidebar = () => {
     const navigate = useNavigate();
 
     const commonLinks = [
-        { to: '/dashboard', label: 'Dashboard', icon: <FaTachometerAlt /> },
+        { to: '/', label: 'Dashboard', icon: <LuLayoutDashboard/> },
     ];
 
     const roleBasedLinks = {
@@ -28,9 +28,9 @@ const Sidebar = () => {
             // Example: { to: '/team-reviews', label: 'Team Reviews', icon: <FaClipboardList /> },
         ],
         hr: [
-            { to: '/initiate', label: 'Initiate Assessment', icon: <FaClipboardList /> },
-            { to: '/teams', label: 'Team Members', icon: <FaUserCheck /> },
-            { to: '/create-employee', label: 'Add Employee', icon: <FaUserPlus /> },
+            { to: '/initiate', label: 'Assessment', icon: <FaClipboardList /> },
+            { to: '/teams', label: 'Team', icon: <FaUsers /> },
+            { to: '/create-employee', label: 'Employee', icon: <FaUserPlus /> },
         ],
     };
 
@@ -43,7 +43,7 @@ const Sidebar = () => {
         <div className="sidebar">
             <h2 className="sidebar-title">Skill Matrix</h2>
             <nav className="nav-links">
-                {[...commonLinks, ...(roleBasedLinks[role] || [])].map((link) => (
+                {[...commonLinks,...(roleBasedLinks[role] || [])].map((link) => (
                     <NavLink
                         key={link.to}
                         to={link.to}
@@ -51,12 +51,13 @@ const Sidebar = () => {
                             isActive ? 'nav-link active' : 'nav-link'
                         }
                     >
-                        <span className="icon">{link.icon}</span>
-                        <span>{link.label}</span>
+                        
+                            <span className="icon" >{link.icon}</span>
+                            <span>{link.label}</span>
                     </NavLink>
                 ))}
 
-                <button className="logout-btn" onClick={handleLogout}>
+                <button className="nav-link logout-btn" onClick={handleLogout}>
                     <FaSignOutAlt className="icon" />
                     <span>Logout</span>
                 </button>
