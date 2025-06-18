@@ -3,7 +3,6 @@ import { EntitySchema } from "typeorm";
 export const Employee = new EntitySchema({
     name: 'Employee',
     tableName: 'employees',
-    
     columns: {
         employee_id: {
             primary: true,
@@ -20,7 +19,7 @@ export const Employee = new EntitySchema({
             unique: true,
             nullable: true
         },
-        password: {
+        password:{
             type: 'varchar',
             nullable: true
         },
@@ -57,7 +56,6 @@ export const Employee = new EntitySchema({
             joinColumn: { name: "team_id" },
             nullable: true
         },
-
         lead_of: {
             type: "one-to-many",
             target: "Team",
@@ -68,6 +66,6 @@ export const Employee = new EntitySchema({
             target: "Employee",
             joinColumn: { name: "hr_id" },
             nullable: true
-        },
+        }
     }
 });

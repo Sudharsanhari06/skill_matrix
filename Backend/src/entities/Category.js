@@ -1,18 +1,18 @@
-import { EntitySchema} from "typeorm";
+import { EntitySchema } from "typeorm";
 
 
 export const Category = new EntitySchema({
-    name: "Category",
-    tableName: "categories",
-    columns: {
-      category_id: {
-         primary: true,
-         type: "int", 
-         generated: true
-         },
-      category_name: { 
-        type: "varchar", 
-        length: 100
-     }
+  name: "Category",
+  tableName: "categories",
+  columns: {
+    category_id: {
+      primary: true,
+      type: "int",
+      generated: true
+    },
+    category_name: {
+      type: "varchar",
+      length: 100
     }
-  });
+  }
+});

@@ -16,7 +16,7 @@ const InitiateAssessment = () => {
       setMessage('Please select a quarter.');
       return;
     }
-  
+
     setLoading(true);
     setMessage('');
 
@@ -63,7 +63,7 @@ const InitiateAssessment = () => {
         <select value={quarter} onChange={(e) => setQuarter(e.target.value)}>
           <option value="">Select Quarter</option>
           {quarters.map((q) => (
-            <option key={q} value={q}>{`Q ${q}`}</option>
+            <option key={q} value={q}>{`Q${q}`}</option>
           ))}
         </select>
       </div>

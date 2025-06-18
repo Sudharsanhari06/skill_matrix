@@ -25,7 +25,7 @@ const CreateEmployee = () => {
         const token = localStorage.getItem('token');
         const headers = { Authorization: `Bearer ${token}` };
 
-        const [rolesRes, teamsRes, catsRes, hrNameRes,employeeRes] = await Promise.all([
+        const [rolesRes, teamsRes, catsRes, hrNameRes, employeeRes] = await Promise.all([
           fetch('http://localhost:3008/roles', { headers }),
           fetch('http://localhost:3008/teams-name', { headers }),
           fetch('http://localhost:3008/categories', { headers }),
@@ -33,7 +33,7 @@ const CreateEmployee = () => {
           fetch('http://localhost:3008/employees', { headers }),
         ]);
 
-        const [rolesData, teamsData, catsData, hrNamesData,employeesData] = await Promise.all([
+        const [rolesData, teamsData, catsData, hrNamesData, employeesData] = await Promise.all([
           rolesRes.json(),
           teamsRes.json(),
           catsRes.json(),
@@ -44,6 +44,7 @@ const CreateEmployee = () => {
         console.log("rolesData", rolesData);
         setRoles(rolesData.result);
         setHrNames(hrNamesData.result);
+        console.log("Hr Names",hrNamesData.result);
         setTeams(teamsData.result);
         setEmployeeData(employeesData.result);
         console.log("teamsData", teamsData);
@@ -69,7 +70,7 @@ const CreateEmployee = () => {
         : [...prev, categoryId]
     );
     if (primaryCategory === categoryId) {
-      setPrimaryCategory(null); // reset if primary is unchecked
+      setPrimaryCategory(null);
     }
   };
 
@@ -130,6 +131,7 @@ const CreateEmployee = () => {
         Create Employee
       </button>
 
+
       {showForm && (
         <>
           <div className="overlay" onClick={() => setShowForm(false)} />
@@ -137,7 +139,6 @@ const CreateEmployee = () => {
             <button className="close-btn" onClick={() => setShowForm(false)}>
               <FaTimes />
             </button>
-            <h2>Create Employee</h2>
             <form onSubmit={handleSubmit}>
               <div className="form-row">
                 <div className="form-group">
@@ -179,8 +180,8 @@ const CreateEmployee = () => {
                     name="role_id"
                     value={formData.role_id}
                     onChange={handleChange}
-                    required
-                  >
+                    required >
+
                     <option value="">Select Role</option>
                     {roles.map(role => (
                       <option key={role.role_id} value={role.role_id}>
@@ -253,24 +254,25 @@ const CreateEmployee = () => {
               <div className="form-buttons">
                 <button type="submit" className="btn-submit">Create Employee</button>
               </div>
+
             </form>
           </div>
         </>
       )}
-    <div className="employee-list-container">
-      <h2>All Employees</h2>
-      <div className="employee-grid">
-        {employeeData.map((emp) => (
-          <div key={emp.employee_id} className="employee-card">
-            <h3>{emp.employee_name}</h3>
-            <p><strong>Email:</strong> {emp.email}</p>
-            <p><strong>Role:</strong> {emp.role?.role_name}</p>
-            <p><strong>Team:</strong> {emp.team?.team_name}</p>
-            <p><strong>ID:</strong> {emp.employee_id}</p>
-          </div>
-        ))}
+      <div className="employee-list-container">
+        <h2>All Employees</h2>
+        <div className="employee-grid">
+          {employeeData.map((emp) => (
+            <div key={emp.employee_id} className="employee-card">
+              <h3>{emp.employee_name}</h3>
+              <p><strong>Email:</strong> {emp.email}</p>
+              <p><strong>Role:</strong> {emp.role?.role_name}</p>
+              <p><strong>Team:</strong> {emp.team?.team_name}</p>
+              <p><strong>ID:</strong> {emp.employee_id}</p>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
     </div>
   );
 

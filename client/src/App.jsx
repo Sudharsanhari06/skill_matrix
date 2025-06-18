@@ -14,6 +14,7 @@ import SkillMatrixForm from './pages/employee/SkillMatrixForm';
 
 import LeadDashboard from './pages/lead/LeadDashboard';
 import ReviewSkillMatrix from './pages/lead/ReviewSkillMatrix';
+import TeamMembers from './pages/lead/TeamMembers';
 
 import HrDashboard from './pages/hr/HrDashboard';
 import InitiateAssessment from './pages/hr/InitiateAssessment';
@@ -57,7 +58,7 @@ const App = () => {
           </>
         )}
 
-   
+
         {role === 'lead' && (
           <>
             <Route
@@ -68,6 +69,9 @@ const App = () => {
                 </Layout>
               }
             />
+            <Route path='/team-review' element={<Layout>
+              <TeamMembers />
+            </Layout>} />
           </>
         )}
 

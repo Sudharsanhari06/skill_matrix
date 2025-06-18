@@ -1,14 +1,15 @@
 import * as leadController from '../controllers/leadController.js';
-import { verifyToken } from '../middleware/authMiddleware.js';
+import { verifyToken,allowRoles } from '../middleware/authMiddleware.js';
 
 export const leadRoutes = [
 
     {
         method: 'GET',
-        path: '/employees/lead/{employeeId}',
+        path: '/employees/lead',
         options: {
             pre: [
-                { method: verifyToken }
+                { method: verifyToken },
+                {method:allowRoles('lead')}
             ]
         },
         handler: leadController.getAllEmployeWithLeadId

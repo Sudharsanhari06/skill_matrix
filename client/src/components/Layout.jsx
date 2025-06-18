@@ -6,7 +6,7 @@ import '../styles/sidebar.css';
 const Layout = ({ children }) => (
   <div className='layout-container'>
     <div className='sidebar-container'>
-        <Sidebar />
+      <Sidebar />
     </div>
     <main className='dashboard-container'>
       {children}

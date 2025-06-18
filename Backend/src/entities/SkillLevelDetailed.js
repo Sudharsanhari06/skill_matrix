@@ -1,7 +1,6 @@
 import { EntitySchema } from "typeorm";
 
 export const SkillLevelDetailed = new EntitySchema({
-    
     name: "SkillLevelDetailed",
     tableName: "skill_levels_detailed",
     columns: {

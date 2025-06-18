@@ -6,6 +6,7 @@ import { authRoutes } from './routes/authRoutes.js';
 import { employeeRoute } from './routes/employeeRoute.js';
 import { adminRouts } from './routes/adminRoutes.js';
 import { leadRoutes } from './routes/leadRouts.js';
+import { skillRoutes } from './routes/skillRoutes.js';
 
 const init = async () => {
   const server = Hapi.server({
@@ -25,6 +26,7 @@ const init = async () => {
     server.route(employeeRoute);
     server.route(adminRouts);
     server.route(leadRoutes)
+    server.route(skillRoutes)
     await server.start();
     console.log(`Server running at: ${server.info.uri}`);
   } catch (error) {

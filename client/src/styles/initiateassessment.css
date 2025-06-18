@@ -1,12 +1,17 @@
+:root {
+  --bg-color: #009587;
+  --white: #FFFFFF;
+  --gray: #E4E4E4;
+  --black: #212529;
+}
+
+
 *{
   padding: 0%;
   margin: 0%;
   box-sizing: border-box;
   font-family: "Nunito", sans-serif;
 }
-
-
-
 
 
 .initiate-container {
@@ -53,17 +58,13 @@
 
 .initiate-btn {
   padding: 12px 20px;
-  background-color: #2563eb;
+  background-color: var(--bg-color);
   color: white;
   font-size: 16px;
   border: none;
   border-radius: 6px;
   cursor: pointer;
   transition: 0.3s;
-}
-
-.initiate-btn:hover {
-  background-color: #1d4ed8;
 }
 
 .initiate-btn:disabled {

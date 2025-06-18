@@ -8,7 +8,6 @@ import {
     FaSignOutAlt,
     FaUserPlus,
 } from 'react-icons/fa';
-
 import '../styles/sidebar.css';
 
 const Sidebar = () => {
@@ -17,7 +16,7 @@ const Sidebar = () => {
     const navigate = useNavigate();
 
     const commonLinks = [
-        { to: '/', label: 'Dashboard', icon: <LuLayoutDashboard/> },
+        { to: '/', label: 'Dashboard', icon: <LuLayoutDashboard /> },
     ];
 
     const roleBasedLinks = {
@@ -25,7 +24,7 @@ const Sidebar = () => {
             { to: '/skill-matrix', label: 'My Skill Matrix', icon: <FaClipboardList /> },
         ],
         lead: [
-            // Example: { to: '/team-reviews', label: 'Team Reviews', icon: <FaClipboardList /> },
+            { to: '/team-review', label: 'Team', icon: <FaUsers /> }
         ],
         hr: [
             { to: '/initiate', label: 'Assessment', icon: <FaClipboardList /> },
@@ -43,7 +42,7 @@ const Sidebar = () => {
         <div className="sidebar">
             <h2 className="sidebar-title">Skill Matrix</h2>
             <nav className="nav-links">
-                {[...commonLinks,...(roleBasedLinks[role] || [])].map((link) => (
+                {[...commonLinks, ...(roleBasedLinks[role] || [])].map((link) => (
                     <NavLink
                         key={link.to}
                         to={link.to}
@@ -51,9 +50,9 @@ const Sidebar = () => {
                             isActive ? 'nav-link active' : 'nav-link'
                         }
                     >
-                        
-                            <span className="icon" >{link.icon}</span>
-                            <span>{link.label}</span>
+
+                        <span className="icon" >{link.icon}</span>
+                        <span>{link.label}</span>
                     </NavLink>
                 ))}
 

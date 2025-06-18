@@ -1,36 +1,37 @@
-import { EntitySchema } from "typeorm";
+import { EntitySchema } from 'typeorm';
 
 export const RoleSkillThreshold = new EntitySchema({
-  name: "RoleSkillThreshold",
-  tableName: "role_skill_thresholds",
+  name: 'RoleSkillThreshold',
+  tableName: 'role_skill_thresholds',
   columns: {
     rst_id: {
+      type: 'int',
       primary: true,
-      type: "int",
-      generated: true
+      generated: true,
     },
-    skill_id: { type: "int" },
-    trainee_threshold: {
-      type: "int", default: 0
+    skill_id:{
+      type:'int'
     },
-    junior_threshold: {
-      type: "int",
-      default: 0
+    desi_id:{
+      type:'int'
     },
-    associate_threshold: {
-      type: "int",
-      default: 0
-    },
-    senior_threshold: {
-      type: "int",
-      default: 0
+    score: {
+      type: 'int',
+      default: 0,
     }
   },
   relations: {
     skill: {
-      type: "many-to-one",
-      target: "Skill",
-      joinColumn: { name: "skill_id" }
-    }
+      type: 'many-to-one',
+      target: 'Skill', // Referencing 'Skill' entity
+      joinColumn: { name: 'skill_id' },
+      nullable: false,
+    },
+    designation: {
+      type: 'many-to-one',
+      target: 'Designation', 
+      joinColumn: { name: 'desi_id' },
+      nullable: false,
+    },
   }
 });

@@ -17,6 +17,7 @@ const LoginForm = () => {
     const [passwordError, setPasswordError] = useState('');
     const [showPassword, setShowPassword] = useState(false);
 
+
     const handleLogin = async (e) => {
         e.preventDefault();
         setEmailError('');
@@ -56,16 +57,16 @@ const LoginForm = () => {
                 console.log("user data ", user)
                 localStorage.setItem('token', token);
                 localStorage.setItem('user', JSON.stringify(user));
-                // console.log("user and token",data.user,data.token)
+
                 dispatch(loginSuccess({ user: data.user, token: data.token }));
-                toast.success('Login Successful');
-                navigate('/dashboard');
+                toast.success('Login Successful', { autoClose: 2000 });
+                setTimeout(() => {
+                    navigate('/dashboard');
+                }, 1000)
             }
             else {
                 throw new Error(data.message || 'Login failed');
-
             }
-
         } catch (err) {
             dispatch(loginFailure(err.message));
         }
@@ -74,7 +75,6 @@ const LoginForm = () => {
     return (
         <section className='login-container'>
             <div className='login-first-part'>
-                {/* Optional image or content */}
             </div>
 
             <form onSubmit={handleLogin} className='login-form'>
