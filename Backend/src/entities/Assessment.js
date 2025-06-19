@@ -29,6 +29,10 @@ export const Assessment = new EntitySchema({
             type: "boolean",
             default: false
         },
+        hr_comments: {
+            type: "text",
+            nullable: true
+        },
         is_active: {
             type: "boolean",
             default: true

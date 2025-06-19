@@ -19,7 +19,7 @@ export const Employee = new EntitySchema({
             unique: true,
             nullable: true
         },
-        password:{
+        password: {
             type: 'varchar',
             nullable: true
         },
@@ -34,6 +34,7 @@ export const Employee = new EntitySchema({
             type: "int",
             nullable: true
         },
+
         is_active: {
             type: "boolean",
             default: true,
@@ -65,6 +66,12 @@ export const Employee = new EntitySchema({
             type: "many-to-one",
             target: "Employee",
             joinColumn: { name: "hr_id" },
+            nullable: true
+        },
+        designation: {
+            type: "many-to-one",
+            target: 'Designation',
+            joinColumn: { name: 'desi_id' },
             nullable: true
         }
     }

@@ -67,12 +67,14 @@ export const getSkillMatrixForHrReview = async (request, h) => {
 export const skillMatrixApproveHr = async (request, h) => {
     try {
         const hrId = request.auth.employee_id
+        
+    const { status, hr_comments } = request.payload;
+
         const { assessment_id } = request.params;
 
-        const result = await adminService.skillMatrixApproveHr(assessment_id, hrId)
-        return h.response({ message: 'HR approval successful' }).code(200); return h.response({ message: "Success", data: result }).code(200);
+        const result = await adminService.skillMatrixApproveHr(assessment_id, hrId, status, hr_comments )
+        return h.response({ message: 'HR approval successful' }).code(200);
     } catch (error) {
-
         console.error("Error approving assessment by HR:", error);
         return h.response({ message: error.message || "Internal Server Error", error }).code(500);
     }

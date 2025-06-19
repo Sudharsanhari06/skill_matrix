@@ -5,28 +5,27 @@ import { Employee } from "../entities/Employee.js";
 import { EmployeeCategoryAssociation } from "../entities/EmployeeCategoryAssociation.js";
 import { Assessment } from '../entities/Assessment.js';
 import { SkillMatrix } from '../entities/SkillMatrix.js';
-import {Role} from '../entities/Role.js'
-import {Category} from '../entities/Category.js';
+import { Role } from '../entities/Role.js'
+import { Category } from '../entities/Category.js';
 import { Team } from "../entities/Team.js";
 
 
 const assessmentRepo = AppDataSource.getRepository(Assessment);
-const roleRepo=AppDataSource.getRepository(Role)
+const roleRepo = AppDataSource.getRepository(Role)
 
 const skillMatrixRepo = AppDataSource.getRepository(SkillMatrix);
 
 const employeeRepo = AppDataSource.getRepository(Employee);
-
-const teamRepo=AppDataSource.getRepository(Team);
+const teamRepo = AppDataSource.getRepository(Team);
 
 
 const categoryAssociationRepo = AppDataSource.getRepository(EmployeeCategoryAssociation);
 
-const categoryRepo=AppDataSource.getRepository(Category);
+const categoryRepo = AppDataSource.getRepository(Category);
 
 
 
-export const addEmployee = async (employee_name, email, password, role_id, team_id, hr_id,categories) => {
+export const addEmployee = async (employee_name, email, password, role_id, team_id, hr_id, categories) => {
     console.log("email", email);
 
     const existingEmployee = await employeeRepo.findOneBy({ email });
@@ -51,8 +50,7 @@ export const addEmployee = async (employee_name, email, password, role_id, team_
         employee: { employee_id: result.employee_id },
         category: { category_id: cat.category_id },
         is_primary: cat.is_primary,
-    }))
-
+    }));
     await categoryAssociationRepo.save(association);
     return result;
 }
@@ -66,32 +64,30 @@ export const getAllEmployees = async () => {
     });
 }
 
-export const getAllRoles=async()=>{
+export const getAllRoles = async () => {
     return roleRepo.find();
 }
 
-export const getAllCategory=async()=>{
+export const getAllCategory = async () => {
     return await categoryRepo.find();
 }
 
-export const getAllTeamsNames=async()=>{
+export const getAllTeamsNames = async () => {
     return await teamRepo.find();
 }
 
-export const getAllHrNames=async()=>{
-    const result =await employeeRepo.find({
-        where:{role_id:2},
+export const getAllHrNames = async () => {
+    const result = await employeeRepo.find({
+        where: { role_id: 2 },
     })
     return result;
 }
 
-// view the skill matrix for employee
-
-
 const getCurrentQuarter = () => {
     const month = new Date().getMonth() + 1;
-    return `${Math.floor((month - 1) / 3) + 1}`;
+    return Math.floor((month - 1) / 3) + 1
 };
+
 
 export const getCurrentSkillMatrixByEmployeeId = async (employeeId) => {
     const year = new Date().getFullYear();
@@ -99,7 +95,10 @@ export const getCurrentSkillMatrixByEmployeeId = async (employeeId) => {
 
     const assessment = await assessmentRepo.findOne({
         where: {
-            employee: { employee_id: employeeId },
+            employee: {
+                employee_id: employeeId
+            },
+            status: 0,
             year,
             quarter
         }
@@ -114,7 +113,7 @@ export const getCurrentSkillMatrixByEmployeeId = async (employeeId) => {
             employee: { employee_id: employeeId },
             assessment: { assessment_id: assessment.assessment_id }
         },
-        relations: ['skill']
+        relations: ['skill', 'skill.level_details']
     });
     return skillMatrix;
 };
@@ -154,8 +153,3 @@ export const submitEmployeeSkillRatings = async (employeeId, ratings) => {
 
     return { message: 'Employee skill ratings submitted successfully' };
 };
-
-
-
-
-

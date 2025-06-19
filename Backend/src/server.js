@@ -25,8 +25,8 @@ const init = async () => {
     server.route(authRoutes);
     server.route(employeeRoute);
     server.route(adminRouts);
-    server.route(leadRoutes)
-    server.route(skillRoutes)
+    server.route(leadRoutes);
+    server.route(skillRoutes);
     await server.start();
     console.log(`Server running at: ${server.info.uri}`);
   } catch (error) {

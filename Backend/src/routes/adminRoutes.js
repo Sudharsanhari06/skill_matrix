@@ -52,7 +52,7 @@ export const adminRouts = [
     },
     {
         method: 'PUT',
-        path: '/hr/skill-matrix-view/{assessment_id}/approve',
+        path: '/hr/skill-matrix-view/{assessment_id}/decision',
         options: {
             pre: [
                 { method: verifyToken },
@@ -60,5 +60,7 @@ export const adminRouts = [
             ]
         },
         handler: adminController.skillMatrixApproveHr
-    }
+    },
+
+
 ]

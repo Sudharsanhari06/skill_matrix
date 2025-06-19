@@ -11,6 +11,7 @@ export const getAllCategories = async () => {
     return await categoryRepo.find();
 };
 
+
 export const getSkillsByCategory = async (category_id) => {
     return await skillRepo.find({
         where: { category: { category_id: parseInt(category_id) } },
@@ -26,14 +27,4 @@ export const getSkillLevelsBySkill = async (skill_id) => {
         relations: ['skill']
     });
 };
-
-
-
-
-
-
-
-
-
-
 

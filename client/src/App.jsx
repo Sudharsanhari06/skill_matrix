@@ -10,11 +10,12 @@ import Layout from './components/Layout';
 
 import EmployeeDashboard from './pages/employee/EmployeeDashboard';
 import SkillMatrixForm from './pages/employee/SkillMatrixForm';
-
+import Assessment from './components/Assessment';
 
 import LeadDashboard from './pages/lead/LeadDashboard';
-import ReviewSkillMatrix from './pages/lead/ReviewSkillMatrix';
 import TeamMembers from './pages/lead/TeamMembers';
+import SkillCriteria from './components/SkillCriteria';
+import LeadReview from './pages/lead/LeadReview';
 
 import HrDashboard from './pages/hr/HrDashboard';
 import InitiateAssessment from './pages/hr/InitiateAssessment';
@@ -30,6 +31,7 @@ const App = () => {
     <BrowserRouter>
       <ToastContainer />
       <Routes>
+
         <Route path="/login" element={<LoginForm />} />
         {user && (
           <Route
@@ -47,14 +49,30 @@ const App = () => {
         {/* Employee Routes */}
         {role === 'employee' && (
           <>
-            <Route
+            {/* <Route
               path="/skill-matrix"
               element={
                 <Layout>
                   <SkillMatrixForm />
                 </Layout>
               }
+            /> */}
+            <Route
+              path="/skill-criteria"
+              element={
+                <Layout>
+                  < SkillCriteria />
+                </Layout>
+              }
             />
+            <Route path='/assessment'
+              element={
+                <Layout>
+                  <Assessment />
+                </Layout>
+              }
+            />
+
           </>
         )}
 
@@ -65,7 +83,26 @@ const App = () => {
               path="/review/:employeeId"
               element={
                 <Layout>
-                  <ReviewSkillMatrix />
+                  <LeadReview />
+                </Layout>
+              }
+            />
+      
+
+
+            <Route path='/assessment'
+              element={
+                <Layout>
+                  <Assessment />
+                </Layout>
+              }
+            />
+
+            <Route
+              path="/skill-criteria"
+              element={
+                <Layout>
+                  < SkillCriteria />
                 </Layout>
               }
             />
@@ -105,7 +142,6 @@ const App = () => {
           </>
         )}
 
-        {/* Fallback */}
         <Route path="*" element={<Navigate to={user ? '/' : '/login'} />} />
       </Routes>
     </BrowserRouter>

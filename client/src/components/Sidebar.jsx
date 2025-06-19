@@ -2,11 +2,13 @@ import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { LuLayoutDashboard } from "react-icons/lu";
+import { MdAssessment } from "react-icons/md";
 import {
     FaClipboardList,
     FaUsers,
     FaSignOutAlt,
     FaUserPlus,
+    FaSortAmountUpAlt
 } from 'react-icons/fa';
 import '../styles/sidebar.css';
 
@@ -21,10 +23,16 @@ const Sidebar = () => {
 
     const roleBasedLinks = {
         employee: [
-            { to: '/skill-matrix', label: 'My Skill Matrix', icon: <FaClipboardList /> },
+            // { to: '/skill-matrix', label: 'Skill Matrix', icon: <FaClipboardList /> },
+            { to: '/skill-criteria', label: 'Criteria', icon: <FaSortAmountUpAlt /> },
+            {to: '/assessment', label: 'Assessment', icon: <MdAssessment />}
+
         ],
         lead: [
-            { to: '/team-review', label: 'Team', icon: <FaUsers /> }
+            { to: '/team-review', label: 'Team', icon: <FaUsers /> },
+            { to: '/skill-criteria', label: 'Criteria', icon: <FaSortAmountUpAlt /> },
+            { to: '/assessment', label: 'Assessment', icon: <MdAssessment />}
+
         ],
         hr: [
             { to: '/initiate', label: 'Assessment', icon: <FaClipboardList /> },

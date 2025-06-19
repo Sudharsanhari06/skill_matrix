@@ -1,0 +1,85 @@
+:root {
+    --bg-color: #009587;
+    --white: #FFFFFF;
+    --gray: #E4E4E4;
+    --black: #212529;
+}
+
+.assessment-container {
+    margin: auto;
+    width: 500px;
+    background: #fdfdfd;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.start-btn,
+.submit-btn {
+    background-color: var(--bg-color);
+    color: white;
+
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    display: block;
+    border-radius: 6px;
+    cursor: pointer;
+    margin: 1rem auto;
+}
+
+.start-btn:hover,
+.submit-btn:hover {
+    background-color: var(--bg-color);
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background: #fafafa;
+    border-left: 4px solid var(--bg-color);
+    border-radius: 6px;
+}
+
+.skill-label{
+    font-weight: bold;
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.rating-select {
+    width: 100%;
+    padding: 8px;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.level-description {
+    font-size: 0.9rem;
+    color: #4b5563;
+    background: #eef2ff;
+    padding: 0.75rem;
+    border-radius: 4px;
+}
+
+.loading,
+.error,
+.message {
+    text-align: center;
+    margin-top: 1rem;
+    font-weight: bold;
+}
+
+.done-message {
+    text-align: center;
+    padding: 1rem;
+    background-color: #dcfce7;
+    color: #065f46;
+    border-radius: 6px;
+    font-weight: 500;
+}

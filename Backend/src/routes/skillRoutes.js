@@ -1,18 +1,8 @@
-import * as skillController from '../controllers/skillController';
-import { verifyToken } from '../middleware/authMiddleware';
+import * as skillController from '../controllers/skillController.js';
+import { verifyToken } from '../middleware/authMiddleware.js';
 
 export const skillRoutes = [
-    {
-        method: 'GET',
-        path: '/categories',
-        options: {
-            pre: [
-                { method: verifyToken }
-            ]
-        },
-        handler: skillController.getAllCategories
-    }
-    ,
+
     {
         method: 'GET',
         path: '/skills/category/{category_id}',

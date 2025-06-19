@@ -1,18 +1,6 @@
 import { DataSource } from 'typeorm';
 import dotenv from 'dotenv';
 dotenv.config();
-// import { Employee } from '../entities/Employee.js'; 
-// // import { Role } from '../entities/Role.js';
-// // import { Assessment } from '../entities/Assessment.js';
-// // import { Category } from '../entities/Category.js';
-// // import { EmployeeCategoryAssociation } from '../entities/EmployeeCategoryAssociation';
-// // import { RoleSkillThreshold } from '../entities/RoleSkillThreshold.js';
-// // import { Skill } from '../entities/Skill.js';
-// // import { SkillLevelDetailed } from '../entities/SkillLevelDetailed.js';
-// // import
-
-
-
 
 export const AppDataSource = new DataSource({
   type: 'mysql',

@@ -20,7 +20,6 @@ export const getAllEmployeWithLeadId = async (employeeId) => {
     return result;
 }
 
-
 export const getSkillMatrixForLeadReview = async () => {
     
     const results = await assessmentRepo.find({
@@ -43,7 +42,6 @@ export const getSkillMatrixForLeadReview = async () => {
         }))
     }));
 };
-
 
 
 export const updateLeadSkillRatings = async (assessment_id, lead_comments, ratings) => {

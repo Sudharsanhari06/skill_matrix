@@ -8,7 +8,6 @@ import { Not } from 'typeorm';
 import { Team } from "../entities/Team.js";
 
 
-
 const teamRepo = AppDataSource.getRepository(Team);
 const employeeRepo = AppDataSource.getRepository(Employee);
 const categoryAssociationRepo = AppDataSource.getRepository(EmployeeCategoryAssociation);
@@ -19,7 +18,7 @@ const skillRepo = AppDataSource.getRepository(Skill);
 
 export const getAllTeams = async () => {
     return await teamRepo.find({
-        relations: ['lead','members','members.role']
+        relations: ['lead', 'members', 'members.role']
     });
 }
 
@@ -42,6 +41,7 @@ export const initiateAssessmentCycle = async (quarter, year) => {
             role: { role_name: Not('hr') }
         }
     });
+    console.log("without hrs", employees);
 
     const assessments = [];
     for (const employee of employees) {
@@ -52,6 +52,7 @@ export const initiateAssessmentCycle = async (quarter, year) => {
                 year
             }
         });
+
         if (existing) continue;
 
         const assessment = assessmentRepo.create({
@@ -65,7 +66,7 @@ export const initiateAssessmentCycle = async (quarter, year) => {
         assessments.push(savedAssessment);
 
         const categories = await categoryAssociationRepo.find({
-            where: { employee: { employee_id: employee.employee_id } },
+            where:{ employee: { employee_id: employee.employee_id } },
             relations: ['category']
         });
 
@@ -75,7 +76,7 @@ export const initiateAssessmentCycle = async (quarter, year) => {
                 relations: ['category']
             });
 
-            for (const skill of skills) {
+        for (const skill of skills) {
                 await skillMatrixRepo.save({
                     employee,
                     assessment: savedAssessment,
@@ -122,28 +123,26 @@ export const getSkillMatrixForHrReview = async (hrId) => {
     }));
 };
 
-export const skillMatrixApproveHr = async (assessment_id, hr_id) => {
+export const skillMatrixApproveHr = async (assessment_id,hr_id,status, hr_comments,) => {
+    if (![3, 4].includes(status)) {
+        throw new Error('Invalid status. Must be 3 (approved) or 4 (rejected)');
+    }
 
     const existing = await assessmentRepo.findOne({
-        where: {
-            assessment_id,
-            status: 2
-        },
+        where: { assessment_id, status: 2 },
         relations: ['employee']
     });
-    if (!existing) {
-        throw new Error('Assessment not found');
-    }
-    if (existing.employee.hr_id !== hr_id){
-        throw new Error('Unauthorized: You cannot approve this assessment');
-    }
 
-        await assessmentRepo.update(
-            { assessment_id },
-            {
-                hr_approve: true,
-                status: 3
-            }
-        );
+    if (!existing) throw new Error('Assessment not found');
+    if (existing.employee.hr_id !== hr_id) throw new Error('Unauthorized');
 
-}
+    await assessmentRepo.update(
+        { assessment_id },
+        {
+            status,
+            hr_comments
+        }
+    );
+
+    return { success: true };
+};

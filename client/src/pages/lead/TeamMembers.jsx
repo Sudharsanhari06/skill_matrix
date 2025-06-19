@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import '../../styles/teammembers.css';
+import { Link } from 'react-router-dom';
 
 const TeamMembers = () => {
     const [members, setMembers] = useState([]);
 
     useEffect(() => {
+
         const fetchTeamMembers = async () => {
             try {
                 const token = localStorage.getItem('token');
@@ -21,7 +23,7 @@ const TeamMembers = () => {
 
                 const data = await response.json();
                 console.log("team members:", data);
-                console.log(" team members only", data.result)
+                console.log(" team members only", data.result);
                 console.log(" team members ", data.result[0].members);
                 setMembers(data.result[0].members);
             } catch (error) {
@@ -31,19 +33,18 @@ const TeamMembers = () => {
 
         fetchTeamMembers();
     }, []);
-
     return (
         <div className="team-container">
             <h2>My Team Members</h2>
             <div className="team">
                 {members.map(member => (
-                    <div className="team-card" key={member.employee_id}>
+                    <Link to={`/review/${member.employee_id}`} key={member.employee_id} className="team-card">
                         <p className="team-avatar">{member.employee_name.charAt(0)}</p>
                         <div className="team-info">
                             <h3>{member.employee_name}</h3>
                             <p>{member.email}</p>
                         </div>
-                    </div>
+                    </Link>
                 ))}
             </div>
         </div>

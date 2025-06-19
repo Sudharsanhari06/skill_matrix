@@ -30,6 +30,12 @@ export const Skill = new EntitySchema({
             type: "many-to-one",
             target: "Category",
             joinColumn: { name: "category_id" }
+        },
+        level_details: {
+            type: "one-to-many",
+            target: "SkillLevelDetailed",
+            inverseSide: "skill", // refers to SkillLevelDetailed.relations.skill
+            cascade: true // optional: allows you to insert/update skill levels with skill
         }
     }
 });
