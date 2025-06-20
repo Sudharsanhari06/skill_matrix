@@ -23,21 +23,22 @@ const Sidebar = () => {
 
     const roleBasedLinks = {
         employee: [
-            // { to: '/skill-matrix', label: 'Skill Matrix', icon: <FaClipboardList /> },
+            { to: '/skill-matrix', label: 'Skill Matrix', icon: <FaClipboardList /> },
             { to: '/skill-criteria', label: 'Criteria', icon: <FaSortAmountUpAlt /> },
-            {to: '/assessment', label: 'Assessment', icon: <MdAssessment />}
+            { to: '/assessment', label: 'Assessment', icon: <MdAssessment /> }
 
         ],
         lead: [
             { to: '/team-review', label: 'Team', icon: <FaUsers /> },
             { to: '/skill-criteria', label: 'Criteria', icon: <FaSortAmountUpAlt /> },
-            { to: '/assessment', label: 'Assessment', icon: <MdAssessment />}
+            { to: '/assessment', label: 'Assessment', icon: <MdAssessment /> }
 
         ],
         hr: [
             { to: '/initiate', label: 'Assessment', icon: <FaClipboardList /> },
             { to: '/teams', label: 'Team', icon: <FaUsers /> },
             { to: '/create-employee', label: 'Employee', icon: <FaUserPlus /> },
+             { to: '/hr/review-list', label: 'Review Assessment', icon: <FaUserPlus /> },
         ],
     };
 
@@ -50,7 +51,7 @@ const Sidebar = () => {
         <div className="sidebar">
             <h2 className="sidebar-title">Skill Matrix</h2>
             <nav className="nav-links">
-                {[...commonLinks, ...(roleBasedLinks[role] || [])].map((link) => (
+                {[...commonLinks,...(roleBasedLinks[role] || [])].map((link) => (
                     <NavLink
                         key={link.to}
                         to={link.to}
@@ -58,8 +59,7 @@ const Sidebar = () => {
                             isActive ? 'nav-link active' : 'nav-link'
                         }
                     >
-
-                        <span className="icon" >{link.icon}</span>
+                    <span className="icon" >{link.icon}</span>
                         <span>{link.label}</span>
                     </NavLink>
                 ))}

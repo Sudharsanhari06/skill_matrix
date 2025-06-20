@@ -21,8 +21,7 @@ export const adminRouts = [
         options: {
             pre: [
                 { method: verifyToken },
-                { method: allowRoles('hr') }
-
+                { method: allowRoles('hr')}
             ]
         },
         handler: adminController.getAllEmployeeswithTeamId
@@ -45,7 +44,7 @@ export const adminRouts = [
         path: '/hr/skill-matrix-view/employee-lead-update',
         options: {
             pre: [{ method: verifyToken },
-                { method: allowRoles('hr') }
+            { method: allowRoles('hr') }
             ]
         },
         handler: adminController.getSkillMatrixForHrReview
@@ -61,6 +60,17 @@ export const adminRouts = [
         },
         handler: adminController.skillMatrixApproveHr
     },
-
+    // get sillmatrix by assessment ID
+    {
+        method:'GET',
+        path:'/hr/skill-matrix-view/{assessment_id}',
+        options:{
+            pre:[
+                {method:verifyToken},
+                {method:allowRoles('hr')}
+            ]
+        },
+        handler:adminController.getSkillMatrixById
+    }
 
 ]

@@ -153,3 +153,34 @@ export const submitEmployeeSkillRatings = async (employeeId, ratings) => {
 
     return { message: 'Employee skill ratings submitted successfully' };
 };
+
+
+
+
+export const viewOwnSkillMatrix = async (employee_id) => {
+    const assessment = await assessmentRepo.findOne({
+      where: {
+        employee: { employee_id },
+        status: 3
+      },
+      order: { assessment_id: 'DESC' },
+      relations: ['skillMatrix', 'skillMatrix.skill']
+    });
+  
+    if (!assessment) {
+      throw new Error('No approved skill matrix found');
+    }
+  
+    return {
+      assessment_id: assessment.assessment_id,
+      status: assessment.status,
+      lead_comments: assessment.lead_comments,
+      hr_comments: assessment.hr_comments,
+      skills: assessment.skillMatrix.map(skillEntry => ({
+        skill_id: skillEntry.skill.skill_id,
+        skill_name: skillEntry.skill.skill_name,
+        employee_rating: skillEntry.employee_rating,
+        lead_rating: skillEntry.lead_rating
+      }))
+    };
+  };

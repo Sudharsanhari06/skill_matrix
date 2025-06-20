@@ -1,5 +1,5 @@
 import * as leadController from '../controllers/leadController.js';
-import { verifyToken,allowRoles } from '../middleware/authMiddleware.js';
+import { verifyToken, allowRoles } from '../middleware/authMiddleware.js';
 
 export const leadRoutes = [
 
@@ -9,7 +9,7 @@ export const leadRoutes = [
         options: {
             pre: [
                 { method: verifyToken },
-                {method:allowRoles('lead')}
+                { method: allowRoles('lead') }
             ]
         },
         handler: leadController.getAllEmployeWithLeadId
@@ -19,8 +19,8 @@ export const leadRoutes = [
         method: 'GET',
         path: '/lead/skill-matrix-view/employee-update',
         options: {
-            pre: [{ method: verifyToken }
-
+            pre: [
+                {method: verifyToken }
             ]
         },
         handler: leadController.getSkillMatrixForLeadReview

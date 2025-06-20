@@ -62,5 +62,16 @@ export const employeeRoute = [
         },
         handler: employeeController.submitEmployeeSkillRatings
 
+    },
+    // view own skill matrix
+    {
+        method: 'GET',
+        path: '/employee/skill-matrix/view',
+        options: {
+            pre: [
+                { method: verifyToken }
+            ]
+        },
+        handler:employeeController.viewOwnSkillMatrix
     }
 ]

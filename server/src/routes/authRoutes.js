@@ -19,8 +19,7 @@ export const authRoutes = [
             }
         },
         handler: authController.login
-    }
-    , {
+    },{
         method: 'PUT',
         path: '/employee/change-password',
         options: {

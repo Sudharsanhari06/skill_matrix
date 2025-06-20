@@ -3,7 +3,9 @@ import { useParams, useNavigate } from 'react-router-dom';
 import '../../styles/hrreview.css';
 
 const HrReviewSkillMatrix = () => {
+
   const { assessmentId } = useParams();
+
   const [assessment, setAssessment] = useState(null);
   const [status, setStatus] = useState('');
   const [hrComments, setHrComments] = useState('');
@@ -19,8 +21,8 @@ const HrReviewSkillMatrix = () => {
             Authorization: `Bearer ${token}`
           }
         });
-        const data = await res.json();
-        setAssessment(data);
+        const da = await res.json();
+        setAssessment(da.data);
       } catch (error) {
         setMsg('Failed to load assessment.');
       }
@@ -43,18 +45,18 @@ const HrReviewSkillMatrix = () => {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          status: parseInt(status), // 3 or 4
+          status: parseInt(status),
           hr_comments: hrComments
         })
       });
 
       const result = await res.json();
-
-      if (!res.ok) throw new Error(result.message || 'Submission failed');
+      if (!res.ok)
+        throw new Error(result.message || 'Submission failed');
       setMsg('✔ Successfully submitted');
       setTimeout(() => navigate('/teams'), 1000);
     } catch (err) {
-      setMsg('❌ ' + err.message);
+      setMsg('❌' + err.message);
     }
   };
 

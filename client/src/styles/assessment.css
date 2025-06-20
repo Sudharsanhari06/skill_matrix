@@ -62,7 +62,7 @@ h2 {
 .level-description {
     font-size: 0.9rem;
     color: #4b5563;
-    background: #eef2ff;
+    /* background: #eef2ff; */
     padding: 0.75rem;
     border-radius: 4px;
 }

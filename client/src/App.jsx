@@ -9,7 +9,7 @@ import LoginForm from './components/LoginForm';
 import Layout from './components/Layout';
 
 import EmployeeDashboard from './pages/employee/EmployeeDashboard';
-import SkillMatrixForm from './pages/employee/SkillMatrixForm';
+import SkillMatrix from './pages/employee/SkillMatrix';
 import Assessment from './components/Assessment';
 
 import LeadDashboard from './pages/lead/LeadDashboard';
@@ -21,6 +21,9 @@ import HrDashboard from './pages/hr/HrDashboard';
 import InitiateAssessment from './pages/hr/InitiateAssessment';
 import CreateEmployee from './pages/hr/CreateEmployee';
 import TeamEmployeeList from './pages/hr/TeamEmployeeList';
+import HrAssessmentList from './pages/hr/HrAssessmentList';
+import HrReviewSkillMatrix from './pages/hr/HrReviewSkillMatrix';
+
 
 
 const App = () => {
@@ -49,14 +52,14 @@ const App = () => {
         {/* Employee Routes */}
         {role === 'employee' && (
           <>
-            {/* <Route
+            {<Route
               path="/skill-matrix"
               element={
                 <Layout>
-                  <SkillMatrixForm />
+                  <SkillMatrix />
                 </Layout>
               }
-            /> */}
+            />}
             <Route
               path="/skill-criteria"
               element={
@@ -87,9 +90,6 @@ const App = () => {
                 </Layout>
               }
             />
-      
-
-
             <Route path='/assessment'
               element={
                 <Layout>
@@ -139,6 +139,23 @@ const App = () => {
                 </Layout>
               }
             />
+            <Route
+              path="/hr/review-list"
+              element={
+                <Layout>
+                  <HrAssessmentList />
+                </Layout>
+              }
+            />
+            <Route
+              path="/hr/review/:assessmentId"
+              element={
+                <Layout>
+                  <HrReviewSkillMatrix />
+                </Layout>
+              }
+            />
+
           </>
         )}
 

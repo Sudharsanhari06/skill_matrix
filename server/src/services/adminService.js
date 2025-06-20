@@ -90,7 +90,6 @@ export const initiateAssessmentCycle = async (quarter, year) => {
             }
         }
     }
-
     return assessments;
 };
 
@@ -99,8 +98,8 @@ export const getSkillMatrixForHrReview = async (hrId) => {
     const results = await assessmentRepo.find({
         where: {
             status: 2,
-            employee: {
-                hr_id: hrId
+            employee:{
+                hr_id:hrId 
             }
         },
         relations: ['employee', 'skillMatrix', 'skillMatrix.skill']
@@ -123,11 +122,12 @@ export const getSkillMatrixForHrReview = async (hrId) => {
     }));
 };
 
+
+
 export const skillMatrixApproveHr = async (assessment_id,hr_id,status, hr_comments,) => {
     if (![3, 4].includes(status)) {
         throw new Error('Invalid status. Must be 3 (approved) or 4 (rejected)');
     }
-
     const existing = await assessmentRepo.findOne({
         where: { assessment_id, status: 2 },
         relations: ['employee']
@@ -146,3 +146,38 @@ export const skillMatrixApproveHr = async (assessment_id,hr_id,status, hr_commen
 
     return { success: true };
 };
+
+
+export const getSkillMatrixById = async (assessment_id, hr_id) => {
+    const assessment = await assessmentRepo.findOne({
+      where: {
+        assessment_id,
+        status: 2
+      },
+      relations: ['employee', 'skillMatrix', 'skillMatrix.skill']
+    });
+
+    if (!assessment) {
+      throw new Error('Assessment not found or not in review stage');
+    }
+  
+    if (assessment.employee.hr_id !== hr_id) {
+      throw new Error('Unauthorized to view this assessment');
+    }
+  
+    return {
+      assessment_id: assessment.assessment_id,
+      lead_comments: assessment.lead_comments,
+      hr_comments: assessment.hr_comments,
+      employee: {
+        id: assessment.employee.employee_id,
+        name: assessment.employee.employee_name
+      },
+      skills: assessment.skillMatrix.map(skill => ({
+        skill_id: skill.skill.skill_id,
+        skill_name: skill.skill.skill_name,
+        employee_rating: skill.employee_rating,
+        lead_rating: skill.lead_rating
+      }))
+    };
+  };

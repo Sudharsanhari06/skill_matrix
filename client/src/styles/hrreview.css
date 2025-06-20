@@ -5,18 +5,18 @@
     margin: auto;
     border-radius: 8px;
   }
-  
-  .skill-box {
+
+.skill-box {
     padding: 1rem;
     background-color: #fff;
     margin-bottom: 1rem;
     border: 1px solid #ddd;
     border-radius: 5px;
-  }
-  
-  .decision-box {
+}
+
+.decision-box {
     margin-top: 1rem;
-  }
+}
   
   select, textarea {
     width: 100%;
