@@ -48,3 +48,22 @@ h2 {
     text-align: center;
     margin-top: 2rem;
 }
+
+
+
+.chart-guidance-container {
+    display: flex;
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.chart-container {
+    flex: 2;
+}
+
+.guidance-panel {
+    flex: 1;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+}

@@ -61,10 +61,7 @@ export const employeeRoute = [
             pre: [{ method: verifyToken }]
         },
         handler: employeeController.submitEmployeeSkillRatings
-
-    },
-    // view own skill matrix
-    {
+    }, {
         method: 'GET',
         path: '/employee/skill-matrix/view',
         options: {
@@ -72,6 +69,16 @@ export const employeeRoute = [
                 { method: verifyToken }
             ]
         },
-        handler:employeeController.viewOwnSkillMatrix
+        handler: employeeController.viewOwnSkillMatrix
+    },
+    {
+        method: 'GET',
+        path: '/gap-analysis',
+        options: {
+            pre: [
+                { method: verifyToken }
+            ]
+        },
+        handler: employeeController.getGapAnalysis
     }
 ]

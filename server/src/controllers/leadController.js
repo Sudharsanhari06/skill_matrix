@@ -41,3 +41,17 @@ export const submitLeadSkillRatings = async (request, h) => {
         return h.response({ message: 'Internal Server Error', error }).code(500);
     }
 };
+
+export const getTeamSkillMatrix = async (request, h) => {
+    const leadId = request.auth.employee_id;
+    try {
+        const result = await leadService.getTeamSkillMatrix(leadId);
+        return h.response({message:'Successfully get the skillmatrix',result}).code(200);
+
+      } catch (err) {
+        console.error(err);
+        return h.response({ error: err.message }).code(500);
+      }
+
+};
+

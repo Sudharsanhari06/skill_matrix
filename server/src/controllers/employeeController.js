@@ -121,3 +121,17 @@ export const viewOwnSkillMatrix = async (request, h) => {
         return h.response({ error: err.message }).code(400);
     }
 };
+
+
+
+
+export const getGapAnalysis = async (request, h) => {
+    try {
+        const employee_id=request.auth.employee_id;
+      const data = await emploeeService.getGapAnalysis(employee_id);
+      return h.response(data).code(200);
+    } catch (error) {
+      console.error('Gap Analysis Controller Error:', error);
+      return h.response({ message: 'Internal Server Error' }).code(500);
+    }
+  };

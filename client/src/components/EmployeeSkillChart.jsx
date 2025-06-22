@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-const EmployeeSkillChart = () => {
-
+const EmployeeSkillChart = ({ onSelectSkill }) => {
   const [matrix, setMatrix] = useState(null);
   const [error, setError] = useState('');
 
@@ -15,7 +14,6 @@ const EmployeeSkillChart = () => {
         });
         if (!res.ok) throw new Error('Failed to fetch skill matrix');
         const data = await res.json();
-
 
         const formatted = data.skills.map((skill) => ({
           skill: skill.skill_name,
@@ -36,19 +34,16 @@ const EmployeeSkillChart = () => {
   if (!matrix) return <p>Loading...</p>;
 
   return (
-    <div style={{ padding: '2rem',overflowX: 'scroll'}}>
-      <h2 style={{ textAlign: 'center' }}>My Skill Ratings</h2>
-      <ResponsiveContainer height={400} style={{ overflowX: 'scroll', width: '100%' }}>
-        <BarChart data={matrix} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-          <XAxis dataKey="skill" />
-          <YAxis domain={[0, 5]} ticks={[0, 1, 2, 3, 4, 5]} />
-          <Tooltip />
-          <Legend />
-          <Bar dataKey="employee" fill="#4ade80" name="Employee Rating" />
-          <Bar dataKey="lead" fill="#60a5fa" name="Lead Rating" />
-        </BarChart>
-      </ResponsiveContainer>
-    </div>
+    <ResponsiveContainer width="100%" height={300}>
+      <BarChart data={matrix} >
+        <XAxis dataKey="skill" />
+        <YAxis />
+        <Tooltip />
+        <Legend />
+        <Bar dataKey="employee" fill="#8884d8" onClick={(data) =>  onSelectSkill && onSelectSkill(data)} />
+        <Bar dataKey="lead" fill="#82ca9d" />
+      </BarChart>
+    </ResponsiveContainer>
   );
 };
 

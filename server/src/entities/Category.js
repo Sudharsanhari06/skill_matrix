@@ -13,6 +13,14 @@ export const Category = new EntitySchema({
     category_name: {
       type: "varchar",
       length: 100
+    },
+  },
+  relations: {
+    skills: {
+      type: "one-to-many",
+      target: "Skill",
+      inverseSide: "category"
     }
   }
+
 });

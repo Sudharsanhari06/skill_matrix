@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import '../../styles/skillmatrix.css';
 import EmployeeSkillChart from '../../components/EmployeeSkillChart';
-
+import GapAnalysis from '../../components/GapAnalysis';
+import SkillDetailsPanel from '../../components/SkillDetailsPanel'; // if you have one
 
 const SkillMatrix = () => {
     const [matrix, setMatrix] = useState(null);
     const [error, setError] = useState('');
+    const [selectedSkill, setSelectedSkill] = useState(null); // 👈 this tracks clicked skill
 
     useEffect(() => {
         const fetchMatrix = async () => {
@@ -30,6 +32,7 @@ const SkillMatrix = () => {
     return (
         <div className="matrix-container">
             <h2>My Skill Matrix</h2>
+
             <table className="skill-table">
                 <thead>
                     <tr>
@@ -48,7 +51,23 @@ const SkillMatrix = () => {
                     ))}
                 </tbody>
             </table>
-            <EmployeeSkillChart />
+
+            <div style={{ display: 'flex', gap: '20px', marginTop: '20px' }}>
+                <div style={{ flex: 2 }}>
+                    <EmployeeSkillChart onSelectSkill={setSelectedSkill} />
+                </div>
+
+                <div style={{ flex: 1 }}>
+                    {selectedSkill ? (
+                        <SkillDetailsPanel skill={selectedSkill} />
+                    ) : (
+                        <p>Select a skill to see guidance</p>
+                    )}
+                </div>
+            </div>
+
+            <GapAnalysis />
+
             <div className="comments-box">
                 <p><strong>Lead Comments:</strong> {matrix.lead_comments || 'N/A'}</p>
                 <p><strong>HR Comments:</strong> {matrix.hr_comments || 'N/A'}</p>

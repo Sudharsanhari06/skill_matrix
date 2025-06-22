@@ -8,8 +8,12 @@ import { SkillMatrix } from '../entities/SkillMatrix.js';
 import { Role } from '../entities/Role.js'
 import { Category } from '../entities/Category.js';
 import { Team } from "../entities/Team.js";
+import { RoleSkillThreshold } from '../entities/RoleSkillThreshold.js';
+import { SkillProgression } from '../entities/SkillProgression.js';
 
 
+const thresholdRepo = AppDataSource.getRepository(RoleSkillThreshold);
+const progressionRepo = AppDataSource.getRepository(SkillProgression);
 const assessmentRepo = AppDataSource.getRepository(Assessment);
 const roleRepo = AppDataSource.getRepository(Role)
 
@@ -159,28 +163,160 @@ export const submitEmployeeSkillRatings = async (employeeId, ratings) => {
 
 export const viewOwnSkillMatrix = async (employee_id) => {
     const assessment = await assessmentRepo.findOne({
-      where: {
-        employee: { employee_id },
-        status: 3
-      },
-      order: { assessment_id: 'DESC' },
-      relations: ['skillMatrix', 'skillMatrix.skill']
+        where: {
+            employee: { employee_id },
+            status: 3
+        },
+        order: { assessment_id: 'DESC' },
+        relations: ['skillMatrix', 'skillMatrix.skill']
+    });
+
+    if (!assessment) {
+        throw new Error('No approved skill matrix found');
+    }
+
+    return {
+        assessment_id: assessment.assessment_id,
+        status: assessment.status,
+        lead_comments: assessment.lead_comments,
+        hr_comments: assessment.hr_comments,
+        skills: assessment.skillMatrix.map(skillEntry => ({
+            skill_id: skillEntry.skill.skill_id,
+            skill_name: skillEntry.skill.skill_name,
+            employee_rating: skillEntry.employee_rating,
+            lead_rating: skillEntry.lead_rating
+        }))
+    };
+};
+
+
+
+// export const getGapAnalysis = async (employee_id) => {
+//     const employee = await employeeRepo.findOne({
+//         where: { employee_id }
+//     });
+//     console.log("employee", employee)
+
+//     if (!employee) return [];
+
+//     const skillMatrix = await skillMatrixRepo.find({
+//         where: { employee: { employee_id } },
+//         relations: ['employee', 'skill']
+//     });
+
+//     const thresholds = await thresholdRepo.find({
+//         where: { desi_id: employee.desi_id }
+//     });
+
+
+//     console.log("employee.desi_id", employee?.desi_id);
+
+
+//     const progressions = await progressionRepo.find();
+//     const result = [];
+
+//     for (const skillEntry of skillMatrix) {
+//         const skill = skillEntry.skill;
+//         console.log("skill", skill);
+//         const currentLevel = skillEntry.lead_rating ?? skillEntry.employee_rating;
+
+//         if (currentLevel === null || currentLevel === undefined) continue;
+
+//         const threshold = thresholds.find(
+//             (t) => t.skill_id === skill.skill_id
+//         );
+
+//         if (threshold) {
+//             const progression = progressions.find(
+//                 (p) =>
+//                     p.skill_id === skill.skill_id &&
+//                     p.from_level_id === currentLevel &&
+//                     p.to_level_id === threshold.score
+//             );
+
+//             result.push({
+//                 employee_id: employee.employee_id,
+//                 employee_name: employee.employee_name,
+//                 skill_id: skill.skill_id,
+//                 skill_name: skill.skill_name,
+//                 current_level: currentLevel,
+//                 expected_level: threshold.score,
+//                 guidance: progression?.guidance,
+//                 resource_link: progression?.resources_link,
+//             });
+//         }
+//     }
+
+//     return result;
+// };
+
+
+export const getGapAnalysis = async (employee_id) => {
+    const employee = await employeeRepo.findOne({
+      where: { employee_id }
     });
   
-    if (!assessment) {
-      throw new Error('No approved skill matrix found');
+    if (!employee) return [];
+  
+    const skillMatrix = await skillMatrixRepo.find({
+      where: { employee: { employee_id } },
+      relations: ['employee', 'skill']
+    });
+  
+    const thresholds = await thresholdRepo.find({
+      where: { desi_id: employee.desi_id }
+    });
+  
+    const progressions = await progressionRepo.find();
+  
+    const result = [];
+  
+    for (const skillEntry of skillMatrix) {
+      const skill = skillEntry.skill;
+      const currentLevel = skillEntry.lead_rating ?? skillEntry.employee_rating;
+  
+      if (currentLevel === null || currentLevel === undefined) continue;
+  
+      const threshold = thresholds.find(
+        (t) => t.skill_id === skill.skill_id
+      );
+  
+      if (!threshold) continue;
+  
+      const expectedLevel = threshold.score;
+  
+      // Guidance from current → expected
+      const toExpected = progressions.find(
+        (p) =>
+          p.skill_id === skill.skill_id &&
+          p.from_level_id === currentLevel &&
+          p.to_level_id === expectedLevel
+      );
+  
+      // Guidance from expected → next
+      const nextLevel = expectedLevel + 1;
+      const toNext = progressions.find(
+        (p) =>
+          p.skill_id === skill.skill_id &&
+          p.from_level_id === expectedLevel &&
+          p.to_level_id === nextLevel
+      );
+  
+      result.push({
+        employee_id: employee.employee_id,
+        employee_name: employee.employee_name,
+        skill_id: skill.skill_id,
+        skill_name: skill.skill_name,
+        current_level: currentLevel,
+        expected_level: expectedLevel,
+        guidance_to_expected: toExpected?.guidance || 'No guidance available',
+        resource_to_expected: toExpected?.resources_link || 'No resource available',
+        next_level: toNext ? nextLevel : null,
+        guidance_to_next: toNext?.guidance || 'No guidance available',
+        resource_to_next: toNext?.resources_link || 'No resource available',
+      });
     }
   
-    return {
-      assessment_id: assessment.assessment_id,
-      status: assessment.status,
-      lead_comments: assessment.lead_comments,
-      hr_comments: assessment.hr_comments,
-      skills: assessment.skillMatrix.map(skillEntry => ({
-        skill_id: skillEntry.skill.skill_id,
-        skill_name: skillEntry.skill.skill_name,
-        employee_rating: skillEntry.employee_rating,
-        lead_rating: skillEntry.lead_rating
-      }))
-    };
+    return result;
   };
+  

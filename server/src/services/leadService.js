@@ -2,6 +2,12 @@ import { AppDataSource } from "../config/database.js";
 import { Team } from "../entities/Team.js";
 import { Assessment } from '../entities/Assessment.js';
 import { SkillMatrix } from "../entities/SkillMatrix.js";
+import { In } from 'typeorm'
+// import { Designation } from "../entities/Designation.js";
+// import { Skill } from "../entities/Skill.js";
+// import { SkillLevelDetailed } from "../entities/SkillLevelDetailed.js";
+// import { Employee } from "../entities/Employee.js";
+
 
 
 
@@ -21,7 +27,7 @@ export const getAllEmployeWithLeadId = async (employeeId) => {
 }
 
 export const getSkillMatrixForLeadReview = async () => {
-    
+
     const results = await assessmentRepo.find({
         where: { status: 1 },
         relations: ['employee', 'skillMatrix', 'skillMatrix.skill']
@@ -45,7 +51,7 @@ export const getSkillMatrixForLeadReview = async () => {
 
 
 export const updateLeadSkillRatings = async (assessment_id, lead_comments, ratings) => {
-    console.log("assessment_id, lead_comments, ratings",assessment_id, lead_comments,ratings)
+    console.log("assessment_id, lead_comments, ratings", assessment_id, lead_comments, ratings)
     const assessment = await assessmentRepo.findOneBy({ assessment_id });
 
     if (!assessment) {
@@ -74,4 +80,37 @@ export const updateLeadSkillRatings = async (assessment_id, lead_comments, ratin
     );
 
     return { success: true };
+};
+
+
+
+export const getTeamSkillMatrix = async (leadId) => {
+    const team = await teamRepo.findOne({
+        where: {
+            lead: { employee_id: leadId }
+        },
+        relations: ['members']
+    });
+
+    if (!team) return [];
+
+    const employeeIds = team.members.map(emp => emp.employee_id);
+
+    const skillMatrixData = await skillMatrixRepo.find({
+        where: {
+            employee: In(employeeIds)
+        },
+        relations: ['employee', 'skill', 'skill.category', 'assessment','employee.designation']
+    });
+    console.log("skillMatrixData", skillMatrixData);
+
+    return skillMatrixData.map(entry => ({
+        employee_id: entry.employee.employee_id,
+        employee_name: entry.employee.employee_name,
+        skill_name: entry.skill.skill_name,
+        designation:entry.employee.designation?.position||'N/A',
+        category: entry.skill.category?.category_name || 'N/A',
+        employee_rating: entry.employee_rating,
+        lead_rating: entry.lead_rating
+    }));
 };

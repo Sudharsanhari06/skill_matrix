@@ -10,7 +10,8 @@ export const Designation = new EntitySchema({
             generated: true
         },
         position: {
-            type: 'varchar'
+            type: 'varchar',
+            nullable:false
         }
     }
 });

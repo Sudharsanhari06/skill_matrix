@@ -23,7 +23,7 @@ import CreateEmployee from './pages/hr/CreateEmployee';
 import TeamEmployeeList from './pages/hr/TeamEmployeeList';
 import HrAssessmentList from './pages/hr/HrAssessmentList';
 import HrReviewSkillMatrix from './pages/hr/HrReviewSkillMatrix';
-
+import TeamSkillMatrix from './components/TeamSkillMatrix';
 
 
 const App = () => {
@@ -79,7 +79,6 @@ const App = () => {
           </>
         )}
 
-
         {role === 'lead' && (
           <>
             <Route
@@ -109,6 +108,9 @@ const App = () => {
             <Route path='/team-review' element={<Layout>
               <TeamMembers />
             </Layout>} />
+
+            <Route path="/team-skill-matrix" element={<Layout><TeamSkillMatrix /></Layout>} />
+
           </>
         )}
 

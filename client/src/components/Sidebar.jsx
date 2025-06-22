@@ -31,8 +31,8 @@ const Sidebar = () => {
         lead: [
             { to: '/team-review', label: 'Team', icon: <FaUsers /> },
             { to: '/skill-criteria', label: 'Criteria', icon: <FaSortAmountUpAlt /> },
-            { to: '/assessment', label: 'Assessment', icon: <MdAssessment /> }
-
+            { to: '/assessment', label: 'Assessment', icon: <MdAssessment /> },
+            {to:"/team-skill-matrix" ,label:'Team SkillMatrix',icon:<FaUsers /> }
         ],
         hr: [
             { to: '/initiate', label: 'Assessment', icon: <FaClipboardList /> },

@@ -34,7 +34,10 @@ export const Employee = new EntitySchema({
             type: "int",
             nullable: true
         },
-
+        desi_id: {
+            type: "int",
+            nullable: true
+        },
         is_active: {
             type: "boolean",
             default: true,
@@ -73,6 +76,11 @@ export const Employee = new EntitySchema({
             target: 'Designation',
             joinColumn: { name: 'desi_id' },
             nullable: true
+        },
+        skillMatrix: {
+            type: "one-to-many",
+            target: "SkillMatrix",
+            inverseSide: "employee"
         }
     }
 });
