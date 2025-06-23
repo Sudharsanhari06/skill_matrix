@@ -16,7 +16,7 @@ const HrAssessmentList = () => {
                     }
                 });
                 const da = await res.json();
-                setAssessments(da.data);
+                setAssessments(da.result);
             } catch (err) {
                 console.error('Failed to fetch assessments:', err);
             }

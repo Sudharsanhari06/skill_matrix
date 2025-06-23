@@ -17,6 +17,10 @@ export const Team = new EntitySchema({
             type: "int",
             nullable: true
         },
+        description:{
+            type:"text",
+            nullable:true            
+        },
         created_at: {
             type: "timestamp",
             default: () => "CURRENT_TIMESTAMP"

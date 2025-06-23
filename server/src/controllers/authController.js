@@ -17,7 +17,6 @@ export const login = async (request, h) => {
         where: { email },
         relations: ['role', 'team'],
     });
-    console.log("emploee", emploee);
 
     if (!emploee) {
         return h.response({ message: 'User not found' }).code(404);
@@ -31,7 +30,7 @@ export const login = async (request, h) => {
     const user = {
         employee_id: emploee.employee_id,
         name: emploee.employee_name,
-        role: emploee.role,
+         role: emploee.role,
         team: emploee.team
     };
 
@@ -46,7 +45,6 @@ export const login = async (request, h) => {
 
 
 export const changePassword = async (request, h) => {
-
     const { oldPassword, newPassword } = request.payload;
     const employeeId = request.auth.employee_id;
 
@@ -66,10 +64,7 @@ export const changePassword = async (request, h) => {
 
         const hashedPassword = await bcrypt.hash(newPassword, 10);
         user.password = hashedPassword;
-        user.is_first_login = false;
-
         await employeeRepo.save(user);
-
         return h.response({ message: 'Password updated successfully' }).code(200);
     } catch (error) {
         console.error('Change password error:', error);

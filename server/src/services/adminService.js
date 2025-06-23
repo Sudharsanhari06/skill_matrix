@@ -25,16 +25,22 @@ export const getAllTeams = async () => {
 export const getAllEmployeeswithTeamId = async (teamId) => {
     const employees = await employeeRepo.find({
         where: {
-            team: { team_id: teamId },
+            team: {team_id: teamId },
             is_active: true
         },
-        relations: ['team', 'role']
+        relations: ['team', 'role','team.lead']
     })
     return employees;
 }
 
-
 export const initiateAssessmentCycle = async (quarter, year) => {
+    const existingAssessments = await assessmentRepo.find({
+        where: { quarter, year }
+    });
+    if (existingAssessments.length > 0) {
+        throw new Error(`Assessment cycle for Q${quarter}, ${year} already exists.`);
+    }
+
     const employees = await employeeRepo.find({
         relations: ['role'],
         where: {
@@ -42,7 +48,7 @@ export const initiateAssessmentCycle = async (quarter, year) => {
         }
     });
     console.log("without hrs", employees);
-
+    
     const assessments = [];
     for (const employee of employees) {
         const existing = await assessmentRepo.findOne({
@@ -66,7 +72,7 @@ export const initiateAssessmentCycle = async (quarter, year) => {
         assessments.push(savedAssessment);
 
         const categories = await categoryAssociationRepo.find({
-            where:{ employee: { employee_id: employee.employee_id } },
+            where: { employee: { employee_id: employee.employee_id } },
             relations: ['category']
         });
 
@@ -75,8 +81,7 @@ export const initiateAssessmentCycle = async (quarter, year) => {
                 where: { category: { category_id: cat.category.category_id } },
                 relations: ['category']
             });
-
-        for (const skill of skills) {
+            for (const skill of skills) {
                 await skillMatrixRepo.save({
                     employee,
                     assessment: savedAssessment,
@@ -92,7 +97,6 @@ export const initiateAssessmentCycle = async (quarter, year) => {
     }
     return assessments;
 };
-
 
 export const getSkillMatrixForHrReview = async (hrId) => {
     const results = await assessmentRepo.find({
@@ -124,7 +128,9 @@ export const getSkillMatrixForHrReview = async (hrId) => {
 
 
 
-export const skillMatrixApproveHr = async (assessment_id,hr_id,status, hr_comments,) => {
+
+
+export const skillMatrixApproveHr = async (assessment_id, hr_id, status, hr_comments,) => {
     if (![3, 4].includes(status)) {
         throw new Error('Invalid status. Must be 3 (approved) or 4 (rejected)');
     }
@@ -147,37 +153,36 @@ export const skillMatrixApproveHr = async (assessment_id,hr_id,status, hr_commen
     return { success: true };
 };
 
-
 export const getSkillMatrixById = async (assessment_id, hr_id) => {
     const assessment = await assessmentRepo.findOne({
-      where: {
-        assessment_id,
-        status: 2
-      },
-      relations: ['employee', 'skillMatrix', 'skillMatrix.skill']
+        where: {
+            assessment_id,
+            status: 2
+        },
+        relations: ['employee', 'skillMatrix', 'skillMatrix.skill']
     });
 
     if (!assessment) {
-      throw new Error('Assessment not found or not in review stage');
+        throw new Error('Assessment not found or not in review stage');
     }
-  
+
     if (assessment.employee.hr_id !== hr_id) {
-      throw new Error('Unauthorized to view this assessment');
+        throw new Error('Unauthorized to view this assessment');
     }
-  
+
     return {
-      assessment_id: assessment.assessment_id,
-      lead_comments: assessment.lead_comments,
-      hr_comments: assessment.hr_comments,
-      employee: {
-        id: assessment.employee.employee_id,
-        name: assessment.employee.employee_name
-      },
-      skills: assessment.skillMatrix.map(skill => ({
-        skill_id: skill.skill.skill_id,
-        skill_name: skill.skill.skill_name,
-        employee_rating: skill.employee_rating,
-        lead_rating: skill.lead_rating
-      }))
+        assessment_id: assessment.assessment_id,
+        lead_comments: assessment.lead_comments,
+        hr_comments: assessment.hr_comments,
+        employee: {
+            id: assessment.employee.employee_id,
+            name: assessment.employee.employee_name
+        },
+        skills: assessment.skillMatrix.map(skill => ({
+            skill_id: skill.skill.skill_id,
+            skill_name: skill.skill.skill_name,
+            employee_rating: skill.employee_rating,
+            lead_rating: skill.lead_rating
+        }))
     };
-  };
+};

@@ -23,7 +23,7 @@ export const RoleSkillThreshold = new EntitySchema({
   relations: {
     skill: {
       type: 'many-to-one',
-      target: 'Skill', // Referencing 'Skill' entity
+      target: 'Skill',
       joinColumn: { name: 'skill_id' },
       nullable: false,
     },

@@ -10,7 +10,7 @@ import { Category } from '../entities/Category.js';
 import { Team } from "../entities/Team.js";
 import { RoleSkillThreshold } from '../entities/RoleSkillThreshold.js';
 import { SkillProgression } from '../entities/SkillProgression.js';
-
+import { Designation } from '../entities/Designation.js'
 
 const thresholdRepo = AppDataSource.getRepository(RoleSkillThreshold);
 const progressionRepo = AppDataSource.getRepository(SkillProgression);
@@ -21,7 +21,7 @@ const skillMatrixRepo = AppDataSource.getRepository(SkillMatrix);
 
 const employeeRepo = AppDataSource.getRepository(Employee);
 const teamRepo = AppDataSource.getRepository(Team);
-
+const designationRepo = AppDataSource.getRepository(Designation);
 
 const categoryAssociationRepo = AppDataSource.getRepository(EmployeeCategoryAssociation);
 
@@ -86,6 +86,10 @@ export const getAllHrNames = async () => {
     })
     return result;
 }
+export const getAllDesignations = async () => {
+    return await designationRepo.find();
+}
+
 
 const getCurrentQuarter = () => {
     const month = new Date().getMonth() + 1;
@@ -102,7 +106,7 @@ export const getCurrentSkillMatrixByEmployeeId = async (employeeId) => {
             employee: {
                 employee_id: employeeId
             },
-            status: 0,
+            // status: 0,
             year,
             quarter
         }
@@ -119,14 +123,16 @@ export const getCurrentSkillMatrixByEmployeeId = async (employeeId) => {
         },
         relations: ['skill', 'skill.level_details']
     });
-    return skillMatrix;
+    return {
+        status: assessment.status, 
+        skills: skillMatrix
+    };;
 };
 
 
 export const submitEmployeeSkillRatings = async (employeeId, ratings) => {
     const year = new Date().getFullYear();
     const quarter = getCurrentQuarter();
-
     const assessment = await assessmentRepo.findOne({
         where: {
             employee: { employee_id: employeeId },
@@ -145,20 +151,15 @@ export const submitEmployeeSkillRatings = async (employeeId, ratings) => {
                 employee: { employee_id: employeeId },
                 assessment: { assessment_id: assessment.assessment_id },
                 skill: { skill_id: rating.skill_id }
-            },
-            {
+            },{
                 employee_rating: rating.employee_rating
             }
         );
     }
-
     assessment.status = 1;
     await assessmentRepo.save(assessment);
-
     return { message: 'Employee skill ratings submitted successfully' };
 };
-
-
 
 
 export const viewOwnSkillMatrix = async (employee_id) => {
@@ -253,70 +254,69 @@ export const viewOwnSkillMatrix = async (employee_id) => {
 
 export const getGapAnalysis = async (employee_id) => {
     const employee = await employeeRepo.findOne({
-      where: { employee_id }
+        where: { employee_id }
     });
-  
+
     if (!employee) return [];
-  
+
     const skillMatrix = await skillMatrixRepo.find({
-      where: { employee: { employee_id } },
-      relations: ['employee', 'skill']
+        where: { employee: { employee_id } },
+        relations: ['employee', 'skill']
     });
-  
+
     const thresholds = await thresholdRepo.find({
-      where: { desi_id: employee.desi_id }
+        where: { desi_id: employee.desi_id }
     });
-  
+
     const progressions = await progressionRepo.find();
-  
+
     const result = [];
-  
+
     for (const skillEntry of skillMatrix) {
-      const skill = skillEntry.skill;
-      const currentLevel = skillEntry.lead_rating ?? skillEntry.employee_rating;
-  
-      if (currentLevel === null || currentLevel === undefined) continue;
-  
-      const threshold = thresholds.find(
-        (t) => t.skill_id === skill.skill_id
-      );
-  
-      if (!threshold) continue;
-  
-      const expectedLevel = threshold.score;
-  
-      // Guidance from current → expected
-      const toExpected = progressions.find(
-        (p) =>
-          p.skill_id === skill.skill_id &&
-          p.from_level_id === currentLevel &&
-          p.to_level_id === expectedLevel
-      );
-  
-      // Guidance from expected → next
-      const nextLevel = expectedLevel + 1;
-      const toNext = progressions.find(
-        (p) =>
-          p.skill_id === skill.skill_id &&
-          p.from_level_id === expectedLevel &&
-          p.to_level_id === nextLevel
-      );
-  
-      result.push({
-        employee_id: employee.employee_id,
-        employee_name: employee.employee_name,
-        skill_id: skill.skill_id,
-        skill_name: skill.skill_name,
-        current_level: currentLevel,
-        expected_level: expectedLevel,
-        guidance_to_expected: toExpected?.guidance || 'No guidance available',
-        resource_to_expected: toExpected?.resources_link || 'No resource available',
-        next_level: toNext ? nextLevel : null,
-        guidance_to_next: toNext?.guidance || 'No guidance available',
-        resource_to_next: toNext?.resources_link || 'No resource available',
-      });
+        const skill = skillEntry.skill;
+        const currentLevel = skillEntry.lead_rating ?? skillEntry.employee_rating;
+
+        if (currentLevel === null || currentLevel === undefined) continue;
+
+        const threshold = thresholds.find(
+            (t) => t.skill_id === skill.skill_id
+        );
+
+        if (!threshold) continue;
+
+        const expectedLevel = threshold.score;
+
+        // Guidance from current → expected
+        const toExpected = progressions.find(
+            (p) =>
+                p.skill_id === skill.skill_id &&
+                p.from_level_id === currentLevel &&
+                p.to_level_id === expectedLevel
+        );
+
+        // Guidance from expected → next
+        const nextLevel = expectedLevel + 1;
+        const toNext = progressions.find(
+            (p) =>
+                p.skill_id === skill.skill_id &&
+                p.from_level_id === expectedLevel &&
+                p.to_level_id === nextLevel
+        );
+
+        result.push({
+            employee_id: employee.employee_id,
+            employee_name: employee.employee_name,
+            skill_id: skill.skill_id,
+            skill_name: skill.skill_name,
+            current_level: currentLevel,
+            expected_level: expectedLevel,
+            guidance_to_expected: toExpected?.guidance || 'No guidance available',
+            resource_to_expected: toExpected?.resources_link || 'No resource available',
+            next_level: toNext ? nextLevel : null,
+            guidance_to_next: toNext?.guidance || 'No guidance available',
+            resource_to_next: toNext?.resources_link || 'No resource available',
+        });
     }
-  
+
     return result;
-  };
-  
+};

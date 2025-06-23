@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import '../../styles/teamlist.css';
+import { Link } from 'react-router-dom';
+
 
 const TeamEmployeeList = () => {
   const [teams, setTeams] = useState([]);
@@ -41,33 +43,35 @@ const TeamEmployeeList = () => {
   if (error) return <div className="team-error">{error}</div>;
 
   return (
-    <div className="team-flex-wrapper">
+    <div className="teams-page">
+    <div className="page-header">
+      <h1>Teams</h1>
+      <p>Manage all teams and their members</p>
+    </div>
+
+    <div className="teams-grid">
       {teams.map((team) => (
-        <div
-          key={team.team_id}
-          className="team-flex-card"
-          onClick={() => toggleTeam(team.team_id)}
-        >
-          <div className="team-header">
-            <div className="team-name">{team.team_name}</div>
-            <div className="lead-name">
-              Lead: {team.lead?.employee_name || 'Not Assigned'}
+        <Link key={team.team_id} to={`/teams/${team.team_id}`} className="team-card-link">
+          <div className="team-card">
+            <div className="team-header">
+              <h3>{team.team_name}</h3>
+             
+              <span className="member-count">{team.members ? team.members.length : 0} members</span>
+            </div>
+            <div className="team-content">
+              <p className="team-lead">
+                <strong>Lead:</strong> {team.lead?.employee_name || 'N/A'}
+              </p>
+              <p className="team-description">{team.description}</p>
+            </div>
+            <div className="team-footer">
+              <span className="view-link">View Team →</span>
             </div>
           </div>
-
-          {expandedTeamId === team.team_id && (
-            <div className="team-members">
-              {team.members.map((member) => (
-                <div key={member.employee_id} className="member">
-                  <span>{member.employee_name}</span>
-                  <span className="role">({member.role?.role_name})</span>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+        </Link>
       ))}
     </div>
+  </div>
   );
 };
 

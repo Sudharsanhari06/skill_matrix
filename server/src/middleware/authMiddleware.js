@@ -21,8 +21,6 @@ export const verifyToken = async (request, h) => {
 export const allowRoles = (...rolesAllowed) => {
     return async (request, h) => {
         const user = request.auth;
-        console.log("user", user);
-
         if (!rolesAllowed.includes(user.role.role_name)) {
             return h.response({ error: 'Access denied' }).code(403).takeover();
         }

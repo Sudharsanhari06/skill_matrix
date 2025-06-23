@@ -24,7 +24,7 @@ import TeamEmployeeList from './pages/hr/TeamEmployeeList';
 import HrAssessmentList from './pages/hr/HrAssessmentList';
 import HrReviewSkillMatrix from './pages/hr/HrReviewSkillMatrix';
 import TeamSkillMatrix from './components/TeamSkillMatrix';
-
+import TeamDetails from './components/TeamDetails';
 
 const App = () => {
   const user = useSelector((state) => state.auth.user);
@@ -138,6 +138,14 @@ const App = () => {
               element={
                 <Layout>
                   <TeamEmployeeList />
+                </Layout>
+              }
+            />
+            <Route
+              path="/teams/:teamId"
+              element={
+                <Layout>
+                  <TeamDetails /> {/* This renders your TeamDetails.jsx */}
                 </Layout>
               }
             />

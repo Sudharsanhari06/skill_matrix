@@ -59,7 +59,7 @@ const LoginForm = () => {
                 localStorage.setItem('user', JSON.stringify(user));
 
                 dispatch(loginSuccess({ user: data.user, token: data.token }));
-                toast.success('Login Successful', { autoClose: 2000 });
+                toast.success('Login Successful', { className: 'custom-color',autoClose: 2000 });
                 setTimeout(() => {
                     navigate('/dashboard');
                 }, 1000)

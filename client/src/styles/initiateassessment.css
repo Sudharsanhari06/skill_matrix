@@ -13,6 +13,10 @@
   font-family: "Nunito", sans-serif;
 }
 
+.swal2-icon{
+  overflow-y: hidden;
+
+}
 
 .initiate-container {
   background-color: #f9fafb;
@@ -22,41 +26,51 @@
   margin: 40px auto;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
-
+.initiate-header{
+  background-color: var(--bg-color);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1.4rem;
+  border-radius:0.5rem ;
+}
 .initiate-title {
-  font-size: 24px;
+  font-size: 1.2rem;
   font-weight: bold;
   color: #1f2937;
-  margin-bottom: 10px;
+  margin: 0.7rem 0;
 }
 
-.initiate-description {
-  font-size: 15px;
-  margin-bottom: 20px;
-  color: #4b5563;
+.initiate-description{
+  font-size: 1.2rem;
+  margin-bottom: 0.8rem;
+  color: var(--white);
+
 }
 
-.form-group {
-  margin-bottom: 20px;
+/* .form-group {
+  margin-bottom:0.8rem;
 }
 
 .form-group label {
   display: block;
   margin-bottom: 6px;
   color: #111827;
-  font-weight: 500;
+  font-size: 1.2rem;
+  font-weight:700 !important;
 }
 
 .form-group select {
   width: 100%;
-  padding: 10px;
+  padding: 0.5rem;
   border-radius: 6px;
   border: 1px solid #d1d5db;
-  font-size: 16px;
+  font-size: 0.9rem;
   background-color: white;
-}
+} */
 
 .initiate-btn {
+  width: 100%;
   padding: 12px 20px;
   background-color: var(--bg-color);
   color: white;
@@ -67,12 +81,8 @@
   transition: 0.3s;
 }
 
-.initiate-btn:disabled {
-  background-color: #93c5fd;
-  cursor: not-allowed;
-}
-
 .status-message {
-  margin-top: 20px;
-  font-weight: bold;
+  margin-top: 0.5rem;
+  font-weight: 550;
+  font-size: 0.8rem;
 }

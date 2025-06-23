@@ -23,7 +23,6 @@ const TeamMembers = () => {
 
                 const data = await response.json();
                 console.log("team members:", data);
-                console.log(" team members only", data.result);
                 console.log(" team members ", data.result[0].members);
                 setMembers(data.result[0].members);
             } catch (error) {

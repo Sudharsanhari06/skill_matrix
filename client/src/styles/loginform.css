@@ -33,7 +33,14 @@
     transform: translate(-50%, -50%);
 
 }
+/* .custom-color{
+    color: var(--bg-color);
 
+    border-bottom: 4px solid #00695c; 
+} */
+/* .custom-color .Toastify__toast-icon {
+    color:var(--bg-color); 
+  } */
 .login-form {
     width: 350px;
     padding: 1.8rem 1.5rem;

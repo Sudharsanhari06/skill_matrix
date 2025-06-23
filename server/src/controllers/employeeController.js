@@ -60,6 +60,15 @@ export const getAllHrNames = async (request, h) => {
     }
 }
 
+export const getAllDesignations = async (request, h) => {
+    try {
+        const result = await emploeeService.getAllDesignations();
+        return h.response({ message: 'Successfully get the Designations', result }).code(200);
+    } catch (error) {
+        console.error("Internal server error", error);
+        return h.response({ message: 'Internal server error' }).code(500);
+    }
+}
 
 
 export const getAllEmployees = async (request, h) => {
@@ -79,12 +88,11 @@ export const getCurrentSkillMatrixByEmployeeId = async (request, h) => {
     try {
         const { employee_id } = request.auth;
         console.log("employee_id", employee_id);
-
-        const skillData = await emploeeService.getCurrentSkillMatrixByEmployeeId(parseInt(employee_id));
+        const skills = await emploeeService.getCurrentSkillMatrixByEmployeeId(employee_id);
 
         return h.response({
             message: 'Skill matrix loaded successfully',
-            skills: skillData
+            skills
         }).code(200);
     } catch (error) {
         return h.response({
@@ -127,11 +135,11 @@ export const viewOwnSkillMatrix = async (request, h) => {
 
 export const getGapAnalysis = async (request, h) => {
     try {
-        const employee_id=request.auth.employee_id;
-      const data = await emploeeService.getGapAnalysis(employee_id);
-      return h.response(data).code(200);
+        const employee_id = request.auth.employee_id;
+        const data = await emploeeService.getGapAnalysis(employee_id);
+        return h.response(data).code(200);
     } catch (error) {
-      console.error('Gap Analysis Controller Error:', error);
-      return h.response({ message: 'Internal Server Error' }).code(500);
+        console.error('Gap Analysis Controller Error:', error);
+        return h.response({ message: 'Internal Server Error' }).code(500);
     }
-  };
+};

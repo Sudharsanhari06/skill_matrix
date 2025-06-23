@@ -2,7 +2,7 @@ import React from 'react'
 
  const LeadDashboard = () => {
   return (
-    <div>LeadDashboard</div>
+    <div>Welcome to Lead Dashboard</div>
   )
 }
 export default LeadDashboard;

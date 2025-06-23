@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import '../../styles/skillmatrix.css';
 import EmployeeSkillChart from '../../components/EmployeeSkillChart';
 import GapAnalysis from '../../components/GapAnalysis';
-import SkillDetailsPanel from '../../components/SkillDetailsPanel'; // if you have one
+import SkillDetailsPanel from '../../components/SkillDetailsPanel';
 
 const SkillMatrix = () => {
     const [matrix, setMatrix] = useState(null);
     const [error, setError] = useState('');
-    const [selectedSkill, setSelectedSkill] = useState(null); // 👈 this tracks clicked skill
+    const [selectedSkill, setSelectedSkill] = useState(null);
 
     useEffect(() => {
         const fetchMatrix = async () => {
@@ -16,7 +16,7 @@ const SkillMatrix = () => {
                 const res = await fetch('http://localhost:3008/employee/skill-matrix/view', {
                     headers: { Authorization: `Bearer ${token}` },
                 });
-                if (!res.ok) throw new Error('Failed to fetch skill matrix');
+                if (!res.ok) throw new Error('The User Did not have the Skill Matrix');
                 const data = await res.json();
                 setMatrix(data);
             } catch (err) {
@@ -32,7 +32,6 @@ const SkillMatrix = () => {
     return (
         <div className="matrix-container">
             <h2>My Skill Matrix</h2>
-
             <table className="skill-table">
                 <thead>
                     <tr>

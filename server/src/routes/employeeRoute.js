@@ -34,6 +34,12 @@ export const employeeRoute = [
         handler: employeeController.getAllHrNames
     },
     {
+        method:'GET',
+        path: '/designations',
+        handler:employeeController.getAllDesignations
+
+    },
+    {
         method: 'GET',
         path: '/employees',
         options: {
@@ -52,8 +58,8 @@ export const employeeRoute = [
             pre: [{ method: verifyToken }]
         },
         handler: employeeController.getCurrentSkillMatrixByEmployeeId
-
-    }, // to submit the skill matrix employee id
+    },
+     // to submit the skill matrix employee id
     {
         method: 'POST',
         path: '/employee/skills/rate',

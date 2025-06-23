@@ -2,7 +2,7 @@ import React from 'react'
 
 const HrDashboard = () => {
   return (
-    <div>HrDashboard</div>
+    <div>Welcome to HrDashboard</div>
   )
 }
 

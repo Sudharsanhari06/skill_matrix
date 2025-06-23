@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import '../../styles/initiateassessment.css';
+import Swal from 'sweetalert2';
+
 
 const quarters = ['1', '2', '3', '4'];
 const currentYear = new Date().getFullYear();
@@ -8,7 +10,6 @@ const yearOptions = [currentYear - 1, currentYear, currentYear + 1];
 const InitiateAssessment = () => {
   const [year, setYear] = useState(currentYear);
   const [quarter, setQuarter] = useState('');
-  const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
 
   const handleInitiate = async () => {
@@ -16,8 +17,6 @@ const InitiateAssessment = () => {
       setMessage('Please select a quarter.');
       return;
     }
-
-    setLoading(true);
     setMessage('');
 
     try {
@@ -33,21 +32,33 @@ const InitiateAssessment = () => {
 
       const data = await response.json();
       if (response.ok) {
-        setMessage(' Assessment cycle initiated successfully!');
+        Swal.fire({
+          icon: 'success',
+          title: 'Success!',
+          text: data.message,
+          confirmButtonColor: '#3085d6'
+        });
+
       } else {
-        setMessage(` ${data.message || 'Failed to initiate assessment.'}`);
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: data.message || 'Internal Server Error',
+          confirmButtonColor: '#d33'
+        });
       }
     } catch (error) {
       setMessage('Server error while initiating assessment.');
-    } finally {
-      setLoading(false);
     }
   };
 
   return (
+
     <div className="initiate-container">
-      <h2 className="initiate-title">Initiate Assessment</h2>
-      <p className="initiate-description">Start a new skill assessment</p>
+      <div className='initiate-header'>
+        <h2 className="initiate-title">Initiate Assessment</h2>
+        <p className="initiate-description">Start a new skill assessment</p>
+      </div>
 
       <div className="form-group">
         <label>Year</label>
@@ -66,14 +77,15 @@ const InitiateAssessment = () => {
             <option key={q} value={q}>{`Q${q}`}</option>
           ))}
         </select>
+        {message && <p className="status-message">{message}</p>}
+
       </div>
 
-      <button className="initiate-btn" onClick={handleInitiate} disabled={loading}>
-        {loading ? 'Initiating...' : 'Start Assessment Cycle'}
+      <button className="initiate-btn" onClick={handleInitiate}>
+        Initiate
       </button>
-
-      {message && <p className="status-message">{message}</p>}
     </div>
+
   );
 };
 
