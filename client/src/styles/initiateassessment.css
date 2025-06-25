@@ -6,14 +6,14 @@
 }
 
 
-*{
+* {
   padding: 0%;
   margin: 0%;
   box-sizing: border-box;
   font-family: "Nunito", sans-serif;
 }
 
-.swal2-icon{
+.swal2-icon {
   overflow-y: hidden;
 
 }
@@ -26,22 +26,25 @@
   margin: 40px auto;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
-.initiate-header{
+
+.initiate-header {
   background-color: var(--bg-color);
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 1.4rem;
-  border-radius:0.5rem ;
+  margin-bottom: 1.2rem;
+  border-radius: 0.5rem;
 }
+
+
 .initiate-title {
   font-size: 1.2rem;
   font-weight: bold;
   color: #1f2937;
-  margin: 0.7rem 0;
+  margin: 0.5rem 0;
 }
 
-.initiate-description{
+.initiate-description {
   font-size: 1.2rem;
   margin-bottom: 0.8rem;
   color: var(--white);

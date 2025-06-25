@@ -1,10 +1,10 @@
 import * as emploeeService from '../services/employeeService.js';
 
 export const addEmployee = async (request, h) => {
-    const { employee_name, email, password, role_id, team_id, hr_id, categories } = request.payload;
+    const { employee_name, email, password, role_id, team_id, hr_id, desi_id,categories } = request.payload;
 
     try {
-        const result = emploeeService.addEmployee(employee_name, email, password, role_id, team_id, hr_id, categories);
+        const result = emploeeService.addEmployee(employee_name, email, password, role_id, team_id, hr_id,desi_id,categories);
 
         return h.response({ message: 'Successfully added the employee', employee_id: result.employee_id }).code(200);
 

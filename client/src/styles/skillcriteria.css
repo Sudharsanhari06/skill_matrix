@@ -1,9 +1,4 @@
-/* SkillCriteria.css */
-*{
-    padding: 0%;
-    margin: 0%;
-    box-sizing: border-box;
-}
+
 .skill-criteria-container {
     width: 100%;
     padding: 1rem;
@@ -89,8 +84,7 @@
   .progress-line.active {
     background-color: #3b82f6;
   }
-  
-  /* Section Card */
+
   .section-card {
     background: white;
     border-radius: 1rem;
@@ -142,8 +136,7 @@
     color: #1f2937;
     margin: 0;
   }
-  
-  /* Custom Select */
+
   .select-container {
     position: relative;
   }
@@ -203,8 +196,8 @@
     margin: 0;
     font-weight: 500;
   }
-  
-  /* Skills Grid */
+
+
   .skills-grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -280,8 +273,7 @@
   .skill-card.selected .skill-arrow {
     color: #10b981;
   }
-  
-  /* Levels Container */
+
   .levels-container {
     display: flex;
     flex-direction: column;
@@ -422,8 +414,7 @@
     color: #9ca3af;
     margin: 0;
   }
-  
-  /* Responsive Design */
+
   @media (max-width: 767px) {
     .skill-criteria-container {
       padding: 1rem;

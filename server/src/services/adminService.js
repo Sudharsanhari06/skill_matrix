@@ -4,7 +4,7 @@ import { Assessment } from '../entities/Assessment.js';
 import { SkillMatrix } from '../entities/SkillMatrix.js';
 import { EmployeeCategoryAssociation } from '../entities/EmployeeCategoryAssociation.js';
 import { Skill } from '../entities/Skill.js';
-import { Not } from 'typeorm';
+import { Not ,Like} from 'typeorm';
 import { Team } from "../entities/Team.js";
 
 
@@ -48,7 +48,7 @@ export const initiateAssessmentCycle = async (quarter, year) => {
         }
     });
     console.log("without hrs", employees);
-    
+
     const assessments = [];
     for (const employee of employees) {
         const existing = await assessmentRepo.findOne({
@@ -186,3 +186,14 @@ export const getSkillMatrixById = async (assessment_id, hr_id) => {
         }))
     };
 };
+
+
+export const getEmployeeByName=async(name)=>{ 
+    const employees = await employeeRepo.find({
+        where: {
+          employee_name:Like(`%${name}%`) 
+        },
+        relations: ['team', 'role']
+      });
+      return employees;
+}

@@ -1,14 +1,12 @@
-// TeamDetails.jsx
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import '../styles/teamDetails.css';
+
+import '../styles/teamdetails.css';
 
 const TeamDetails = () => {
     const { teamId } = useParams();
     const [teamInfo, setTeamInfo] = useState(null);
-    const user = useSelector((state) => state.auth.user);
-    const role = user?.role?.role_name;
+
     const [employees, setEmployees] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -19,16 +17,36 @@ const TeamDetails = () => {
             setLoading(true);
             setError('');
             try {
-
                 const token = localStorage.getItem('token');
-
                 const response = await fetch(`http://localhost:3008/teams/${teamId}/employees`, {
                     headers: {
                         Authorization: `Bearer ${token}`,
                     },
                 });
 
-                
+                if (response.ok) {
+                    const data = await response.json();
+
+                    if (data.result && data.result.length > 0) {
+                        setEmployees(data.result);
+                        setTeamInfo(data.result[0].team);
+                    } else {
+                        setEmployees([]);
+                        setTeamInfo(null);
+                        throw new Error('No employees found for this team.');
+                    }
+                    console.log("teams members:", data.result);
+                } else {
+                    const foundEmployees = sampleEmployeesForTeam[teamId];
+                    if (foundEmployees && foundEmployees.length > 0) {
+                        setEmployees(foundEmployees);
+                        setTeamInfo(foundEmployees[0].team);
+                    } else {
+                        setEmployees([]);
+                        setTeamInfo(null);
+                        throw new Error('Team not found from API or sample data.');
+                    }
+                }
             } catch (err) {
                 setError(err.message);
 

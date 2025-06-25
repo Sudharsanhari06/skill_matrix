@@ -20,8 +20,6 @@ export const changePassword = async (request, h) => {
 
     const hashedPassword = await bcrypt.hash(newPassword, 10);
     user.password = hashedPassword;
-    user.is_first_login = false;
-
     await employeeRepo.save(user);
     return h.response({ message: 'Password updated successfully' }).code(200);
 };

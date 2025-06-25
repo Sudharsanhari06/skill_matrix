@@ -20,7 +20,6 @@ const EmployeeSkillChart = ({ onSelectSkill }) => {
           employee: skill.employee_rating ?? 0,
           lead: skill.lead_rating ?? 0,
         }));
-
         setMatrix(formatted);
       } catch (err) {
         setError(err.message);
@@ -40,7 +39,7 @@ const EmployeeSkillChart = ({ onSelectSkill }) => {
         <YAxis />
         <Tooltip />
         <Legend />
-        <Bar dataKey="employee" fill="#8884d8" onClick={(data) =>  onSelectSkill && onSelectSkill(data)} />
+        <Bar dataKey="employee" fill="#8884d8" onClick={(data) => onSelectSkill && onSelectSkill(data)} />
         <Bar dataKey="lead" fill="#82ca9d" />
       </BarChart>
     </ResponsiveContainer>

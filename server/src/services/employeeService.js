@@ -29,7 +29,7 @@ const categoryRepo = AppDataSource.getRepository(Category);
 
 
 
-export const addEmployee = async (employee_name, email, password, role_id, team_id, hr_id, categories) => {
+export const addEmployee = async (employee_name, email, password, role_id, team_id, hr_id, desi_id,categories) => {
     console.log("email", email);
 
     const existingEmployee = await employeeRepo.findOneBy({ email });
@@ -45,6 +45,7 @@ export const addEmployee = async (employee_name, email, password, role_id, team_
         role_id,
         team_id,
         hr_id,
+        desi_id,
         is_active: true
     })
 
@@ -192,65 +193,6 @@ export const viewOwnSkillMatrix = async (employee_id) => {
 
 
 
-// export const getGapAnalysis = async (employee_id) => {
-//     const employee = await employeeRepo.findOne({
-//         where: { employee_id }
-//     });
-//     console.log("employee", employee)
-
-//     if (!employee) return [];
-
-//     const skillMatrix = await skillMatrixRepo.find({
-//         where: { employee: { employee_id } },
-//         relations: ['employee', 'skill']
-//     });
-
-//     const thresholds = await thresholdRepo.find({
-//         where: { desi_id: employee.desi_id }
-//     });
-
-
-//     console.log("employee.desi_id", employee?.desi_id);
-
-
-//     const progressions = await progressionRepo.find();
-//     const result = [];
-
-//     for (const skillEntry of skillMatrix) {
-//         const skill = skillEntry.skill;
-//         console.log("skill", skill);
-//         const currentLevel = skillEntry.lead_rating ?? skillEntry.employee_rating;
-
-//         if (currentLevel === null || currentLevel === undefined) continue;
-
-//         const threshold = thresholds.find(
-//             (t) => t.skill_id === skill.skill_id
-//         );
-
-//         if (threshold) {
-//             const progression = progressions.find(
-//                 (p) =>
-//                     p.skill_id === skill.skill_id &&
-//                     p.from_level_id === currentLevel &&
-//                     p.to_level_id === threshold.score
-//             );
-
-//             result.push({
-//                 employee_id: employee.employee_id,
-//                 employee_name: employee.employee_name,
-//                 skill_id: skill.skill_id,
-//                 skill_name: skill.skill_name,
-//                 current_level: currentLevel,
-//                 expected_level: threshold.score,
-//                 guidance: progression?.guidance,
-//                 resource_link: progression?.resources_link,
-//             });
-//         }
-//     }
-
-//     return result;
-// };
-
 
 export const getGapAnalysis = async (employee_id) => {
     const employee = await employeeRepo.findOne({
@@ -286,7 +228,6 @@ export const getGapAnalysis = async (employee_id) => {
 
         const expectedLevel = threshold.score;
 
-        // Guidance from current → expected
         const toExpected = progressions.find(
             (p) =>
                 p.skill_id === skill.skill_id &&
@@ -294,7 +235,7 @@ export const getGapAnalysis = async (employee_id) => {
                 p.to_level_id === expectedLevel
         );
 
-        // Guidance from expected → next
+  
         const nextLevel = expectedLevel + 1;
         const toNext = progressions.find(
             (p) =>

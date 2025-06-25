@@ -97,7 +97,6 @@ const HrReviewSkillMatrix = () => {
                   <span className="rating-label">Employee Rating:</span>
                   <StarRating rating={skill.employee_rating} />
                   <span className="rating-number">({skill.employee_rating}/5)</span>
-
                 </div>
                 <div className="rating-item">
                   <span className="rating-label">Lead Rating:</span>

@@ -42,7 +42,7 @@ const SkillCriteria = () => {
   return (
     <div className="skill-criteria-container">
       <div className="skill-criteria-content">
-        {/* Header */}
+
         <div className="header">
           <h1 className="main-title">Skill Criteria</h1>
           <p className="subtitle">Select a skill category to view associated skills and their level descriptions.</p>
@@ -81,11 +81,10 @@ const SkillCriteria = () => {
           )}
         </div>
 
-        {/* Skills Section */}
+   
         {skills.length > 0 && (
           <div className="section-card">
             <div className="section-header">
-              <span className="section-icon skills-icon">🛠️</span>
               <h2 className="section-title">Select Skill</h2>
             </div>
             <div className="skills-grid">
@@ -99,7 +98,6 @@ const SkillCriteria = () => {
                   }}
                 >
                   <span className="skill-name">{skill.skill_name}</span>
-                  <span className="skill-arrow">➡️</span>
                 </button>
               ))}
             </div>
@@ -112,7 +110,6 @@ const SkillCriteria = () => {
           </div>
         )}
 
-        {/* Levels Section */}
         {levels.length > 0 && (
           <div className="section-card">
             <div className="section-header">
@@ -144,10 +141,9 @@ const SkillCriteria = () => {
           </div>
         )}
 
-        {/* Empty State */}
         {selectedCategory && skills.length === 0 && (
           <div className="empty-state">
-            <span className="empty-icon">😶</span>
+  
             <p className="empty-title">No skills found for this category</p>
             <p className="empty-description">Please try selecting another category.</p>
           </div>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import '../../styles/teammembers.css';
-import { Link } from 'react-router-dom';
+// import '../../styles/teammembers.css';
+import '../../styles/teamdetails.css';
 
 const TeamMembers = () => {
     const [members, setMembers] = useState([]);
@@ -29,24 +29,26 @@ const TeamMembers = () => {
                 console.error('Error:', error);
             }
         };
-
         fetchTeamMembers();
     }, []);
     return (
-        <div className="team-container">
-            <h2>My Team Members</h2>
-            <div className="team">
-                {members.map(member => (
-                    <Link to={`/review/${member.employee_id}`} key={member.employee_id} className="team-card">
-                        <p className="team-avatar">{member.employee_name.charAt(0)}</p>
-                        <div className="team-info">
-                            <h3>{member.employee_name}</h3>
-                            <p>{member.email}</p>
-                        </div>
-                    </Link>
-                ))}
-            </div>
+        <div className="employees-section">
+        <div className="employees-grid">
+            {members.map((employee) => (
+                <div className="employee-card__team">
+                    <div className="employee-avatar">
+
+                        {employee.employee_name ? employee.employee_name.split(' ').map(n => n[0]).join('') : 'N/A'}
+                    </div>
+                    <div className="employee-info">
+                        <h3>{employee.employee_name}</h3>
+                        <p className="employee-role">{employee.role?.role_name || 'Role N/A'}</p>
+                        <p className="employee-email">{employee.email || 'Email N/A'}</p>
+                    </div>
+                </div>
+            ))}
         </div>
+    </div>
     );
 };
 

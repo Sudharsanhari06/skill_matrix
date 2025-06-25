@@ -42,7 +42,7 @@ const Assessment = () => {
     const handleRatingChange = (skillId, value) => {
         setRatings({ ...ratings, [skillId]: parseInt(value) });
     };
-
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
         const payload = Object.entries(ratings).map(([skill_id, rating]) => ({

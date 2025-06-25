@@ -14,7 +14,6 @@
 .dashboard-side {
   width: 90% !important;
   background-color: green;
-
 }
 
 .sidebar {
@@ -62,22 +61,28 @@
 }
 
 .nav-link span {
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   text-align: center;
   margin-top: 0.2rem;
   color: #4a525a;
 }
 
-.nav-link .icon {
+.nav-link .icon svg{
+  fill:#333333e1;
   font-size: 1.3rem;
 }
 
 .nav-link.active {
   color: var(--bg-color);
   border-left: 3px solid var(--bg-color);
-  background-color: #f0fdf4;
+  background-color: #f0fdf4cd;
+  fill:var(--bg-color);
 }
 
+.nav-link.active .icon svg{
+  fill: #009587;
+  stroke:#009587 ;
+}
 
 
 .logout-btn {
@@ -91,3 +96,9 @@
   margin-top: auto;
 }
 
+
+.navbar-container{
+  height: 8vh;
+  background-color:#009587;
+  
+}

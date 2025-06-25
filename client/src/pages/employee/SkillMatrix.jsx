@@ -55,7 +55,6 @@ const SkillMatrix = () => {
                 <div style={{ flex: 2 }}>
                     <EmployeeSkillChart onSelectSkill={setSelectedSkill} />
                 </div>
-
                 <div style={{ flex: 1 }}>
                     {selectedSkill ? (
                         <SkillDetailsPanel skill={selectedSkill} />

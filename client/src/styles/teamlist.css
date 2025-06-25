@@ -4,7 +4,6 @@
   box-sizing: border-box;
   font-family: "Nunito", sans-serif;
 }
-/* teams.css */
 
 .teams-page {
   padding: 2rem;
@@ -18,10 +17,32 @@
 }
 
 .page-header h1 {
-  font-size: 2.25rem; 
+  font-size: 2.1rem; 
   font-weight: 700; 
   color: #009587; 
 
+}
+
+.loading{
+  width: 40px;
+  height: 40px;
+  border-top: 3px solid var(--bg-color);
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%,-50%);
+  z-index: 100;
+  animation: loader 1s linear infinite;
+}
+@keyframes loader {
+  0%{
+    transform: rotate(0deg);
+  }
+  100%{
+    transform: translate(360deg);
+  }
+  
 }
 
 .page-header p {
@@ -64,18 +85,18 @@
 }
 
 .team-header h3 {
-  font-size: 1.5rem; /* text-xl */
-  font-weight: 600; /* font-semibold */
-  color: #333333; /* text-gray-800 */
+  font-size: 1.5rem;
+  font-weight: 600; 
+  color: #333333; 
 }
 
 .member-count {
-  background-color: #009587; /* bg-teal-500 */
-  color: #ffffff; /* text-white */
-  padding: 0.25rem 0.75rem; /* px-3 py-1 */
-  border-radius: 9999px; /* rounded-full */
-  font-size: 0.875rem; /* text-sm */
-  font-weight: 500; /* font-medium */
+  background-color: #009587; 
+  color: #ffffff;
+  padding: 0.25rem 0.75rem; 
+  border-radius: 9999px; 
+  font-size: 0.875rem; 
+  font-weight: 500; 
 }
 
 .team-content {
@@ -91,30 +112,30 @@
 }
 
 .team-lead strong {
-  font-weight: 600; /* font-semibold */
+  font-weight: 600;
 }
 
 .team-description {
   width: 90%;
   text-align: justify;
-  font-size: 0.87rem; /* text-sm */
-  color: #71717a; /* text-gray-600 */
+  font-size: 0.87rem;
+  color: #71717a; 
   line-height: 1.5;
 }
 
 .team-footer {
-  border-top: 1px solid #e5e7eb; /* border-t border-gray-200 */
-  padding-top: 1rem; /* pt-4 */
+  border-top: 1px solid #e5e7eb;
+  padding-top: 1rem; 
   text-align: right;
 }
 
 .view-link {
-  font-size: 0.875rem; /* text-sm */
-  font-weight: 600; /* font-semibold */
-  color: #009587; /* text-teal-600 */
+  font-size: 0.875rem;
+  font-weight: 600; 
+  color: #009587; 
   transition: color 0.2s ease-in-out;
 }
 
 .view-link:hover {
-  color: #047857; /* text-teal-700 */
+  color: #047857; 
 }

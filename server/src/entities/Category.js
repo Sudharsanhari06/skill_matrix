@@ -13,7 +13,7 @@ export const Category = new EntitySchema({
     category_name: {
       type: "varchar",
       length: 100
-    },
+    }
   },
   relations: {
     skills: {
@@ -22,5 +22,4 @@ export const Category = new EntitySchema({
       inverseSide: "category"
     }
   }
-
 });

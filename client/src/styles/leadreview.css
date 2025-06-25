@@ -16,7 +16,6 @@
     
   }
   
-  /* Header Section */
   .review-header {
     margin-bottom: 2rem;
     padding-bottom: 1rem;
@@ -30,8 +29,7 @@
     margin: 0;
     text-align: center;
   }
-  
-  /* Skills Section */
+
   .skills-section {
     margin-bottom: 2rem;
   }
@@ -111,7 +109,6 @@
     border-color: #9ca3af;
   }
   
-  /* Comments Section */
   .comments-section {
     margin-bottom: 2rem;
   }
@@ -149,7 +146,6 @@
     color: #9ca3af;
   }
   
-  /* Submit Section */
   .submit-section {
     text-align: center;
     margin-bottom: 1rem;
@@ -181,8 +177,7 @@
     outline: none;
     box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
   }
-  
-  /* Message Styles */
+
   .message {
     padding: 0.75rem 1rem;
     border-radius: 6px;
@@ -195,45 +190,5 @@
     background-color: #d1fae5;
     color: #065f46;
     border: 1px solid #a7f3d0;
-  }
-  
-  /* Responsive Design */
-  @media (max-width: 768px) {
-    .review-container {
-      padding: 1rem;
-      margin: 1rem;
-    }
-  
-    .review-title {
-      font-size: 1.5rem;
-    }
-  
-    .rating-row {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.75rem;
-    }
-  
-    .rating-select {
-      min-width: 100%;
-    }
-  
-    .skill-item {
-      padding: 1rem;
-    }
-  }
-  
-  @media (max-width: 480px) {
-    .review-container {
-      padding: 0.75rem;
-    }
-  
-    .skill-name {
-      font-size: 1.125rem;
-    }
-  
-    .submit-button {
-      width: 100%;
-    }
   }
   

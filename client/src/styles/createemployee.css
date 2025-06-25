@@ -264,13 +264,14 @@
 
 .employee-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
-    gap: 1.5rem; 
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    padding: 0.5rem 0; 
 }
 
 .employee-card {
     background-color: #f8fcfb; 
-    border: 1px solid #e0f2f1;
+    border: 2px solid #e0f2f1;
     border-radius: 0.75rem; 
     padding: 1.25rem; 
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);

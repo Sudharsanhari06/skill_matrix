@@ -71,6 +71,16 @@ export const adminRouts = [
             ]
         },
         handler: adminController.getSkillMatrixById
+    },
+    {
+        method: 'GET',
+        path:'/employees/search',
+        options: {
+            pre: [
+                { method: verifyToken },
+            ]
+        },
+        handler:adminController.getEmployeeByName
     }
 
 ]

@@ -3,11 +3,6 @@ import { Team } from "../entities/Team.js";
 import { Assessment } from '../entities/Assessment.js';
 import { SkillMatrix } from "../entities/SkillMatrix.js";
 import { In } from 'typeorm'
-// import { Designation } from "../entities/Designation.js";
-// import { Skill } from "../entities/Skill.js";
-// import { SkillLevelDetailed } from "../entities/SkillLevelDetailed.js";
-// import { Employee } from "../entities/Employee.js";
-
 
 
 
@@ -20,9 +15,8 @@ export const getAllEmployeWithLeadId = async (employeeId) => {
         where: {
             lead: { employee_id: employeeId }
         },
-        relations: ['members',]
+        relations: ['members','members.role']
     })
-    // const allMembers=result.flatMap(team=>team.members)
     return result;
 }
 

@@ -25,7 +25,6 @@ const LeadReview = () => {
             console.log("result ", result)
             setAssessment(result);
         };
-
         fetchAssessment();
     }, [employeeId]);
 
@@ -54,9 +53,9 @@ const LeadReview = () => {
         });
 
         if (res.ok) {
-            setMsg('✔ Review submitted.');
+            setMsg('Review submitted.');
         } else {
-            setMsg('❌ Failed to submit.');
+            setMsg('Failed to submit.');
         }
     };
 

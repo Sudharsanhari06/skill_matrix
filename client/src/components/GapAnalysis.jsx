@@ -5,7 +5,7 @@ const GapAnalysis = () => {
 
   useEffect(() => {
     const fetchGapAnalysis = async () => {
-      const token = localStorage.getItem("token"); // optional, if auth used
+      const token = localStorage.getItem("token"); 
       const response = await fetch('http://localhost:3008/gap-analysis', {
         headers: {
           Authorization: `Bearer ${token}`
@@ -14,7 +14,6 @@ const GapAnalysis = () => {
       const data = await response.json();
       setGapData(data);
     };
-
     fetchGapAnalysis();
   }, []);
 
