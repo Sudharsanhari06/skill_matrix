@@ -1,18 +1,18 @@
 import * as emploeeService from '../services/employeeService.js';
 
 export const addEmployee = async (request, h) => {
-    const { employee_name, email, password, role_id, team_id, hr_id, desi_id,categories } = request.payload;
+    const { employee_name, email, password, role_id, team_id, hr_id, desi_id, categories } = request.payload;
 
     try {
-        const result = emploeeService.addEmployee(employee_name, email, password, role_id, team_id, hr_id,desi_id,categories);
+        const result = emploeeService.addEmployee(employee_name, email, password, role_id, team_id, hr_id, desi_id, categories);
 
-        return h.response({ message: 'Successfully added the employee', employee_id: result.employee_id }).code(200);
+        return h.response({ success: true, message: 'Successfully added the employee', employee_id: result.employee_id }).code(200);
 
     } catch (error) {
         if (error.message === 'Email already exists') {
             return h.response({ message: error.message }).code(400);
         } else {
-            return h.response({ message: "Internal server Error", error }).code(500)
+            return h.response({ success: false, message: "Internal server Error", error }).code(500)
 
         }
     }
@@ -123,13 +123,12 @@ export const viewOwnSkillMatrix = async (request, h) => {
     const employee_id = request.auth.employee_id;
     try {
         const data = await emploeeService.viewOwnSkillMatrix(employee_id);
-        return h.response(data).code(200);
+        return h.response({ data,success:true }).code(200);
     } catch (err) {
         console.error(err);
-        return h.response({ error: err.message }).code(400);
+        return h.response({ success:false, error: err.message }).code(400);
     }
 };
-
 
 
 

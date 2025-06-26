@@ -6,9 +6,9 @@
 }
 
 .sidebar-container {
-  width: 150px;
+  width: 120px;
   border-radius: 1rem;
-  margin: 0.8rem 0.8rem 0.7rem 1.2rem;
+  margin: 3.2rem 0.8rem 0.7rem 1.2rem;
 }
 
 .dashboard-side {
@@ -21,15 +21,40 @@
   width: 100%;
   background-color: var(--white);
   color: white;
-  padding: 20px;
+  padding: 0.8rem 0.9rem;
   color: var(--black);
   border-radius: 1rem;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
   display: flex;
   flex-direction: column;
   align-items: center;
-
 }
+
+.navbar-container {
+  height: 9vh;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0; 
+  background-color:#009587;
+  border-bottom: 1px solid #ccc;
+  z-index: 200;
+   display: flex;
+   align-items: center;
+ justify-content: space-between; 
+  padding: 0 1.1rem;
+}
+.logo h2{
+  color:#E1E3E5;
+}
+.profile{
+  font-size: 1.7rem;
+}
+
+.main-content{
+width: 100%;
+}
+
 
 .sidebar-title {
   font-size: 1rem;
@@ -39,12 +64,14 @@
   text-align: center;
 }
 
+
 .nav-links {
   width: 100%;
   display: flex;
   flex-direction: column;
   gap: 0.7rem;
   flex-grow: 1;
+  margin-top: 0.7rem;
 }
 
 .nav-link {
@@ -94,11 +121,4 @@
   font-size: 0.95rem;
   transition: background-color 0.2s ease, color 0.2s ease;
   margin-top: auto;
-}
-
-
-.navbar-container{
-  height: 8vh;
-  background-color:#009587;
-  
 }

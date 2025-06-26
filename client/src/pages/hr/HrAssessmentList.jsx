@@ -1,27 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../../styles/hrassessmentlist.css';
+import { employeeLeadUpdate } from '../../services/adminService';
 
 const HrAssessmentList = () => {
     const [assessments, setAssessments] = useState([]);
-
     useEffect(() => {
-
         const fetchAssessments = async () => {
             try {
-                const token = localStorage.getItem('token');
-                const res = await fetch('http://localhost:3008/hr/skill-matrix-view/employee-lead-update', {
-                    headers: {
-                        Authorization: `Bearer ${token}`
-                    }
-                });
-                const da = await res.json();
-                setAssessments(da.result);
+            const data=await employeeLeadUpdate()
+                setAssessments(data.result);
             } catch (err) {
                 console.error('Failed to fetch assessments:', err);
             }
         };
-
         fetchAssessments();
     }, []);
 

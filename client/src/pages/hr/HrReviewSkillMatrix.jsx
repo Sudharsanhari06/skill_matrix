@@ -3,6 +3,10 @@ import { useParams, useNavigate } from 'react-router-dom';
 import '../../styles/hrreview.css';
 import Swal from 'sweetalert2';
 import StarRating from '../../components/StarRating';
+import { hrSkillMatrixView,hrDecisionSkillMatrix } from '../../services/adminService';
+
+
+
 const HrReviewSkillMatrix = () => {
 
   const { assessmentId } = useParams();
@@ -16,14 +20,8 @@ const HrReviewSkillMatrix = () => {
   useEffect(() => {
     const fetchAssessment = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const res = await fetch(`http://localhost:3008/hr/skill-matrix-view/${assessmentId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
-        const da = await res.json();
-        setAssessment(da.data);
+        const result= await hrSkillMatrixView(assessmentId);
+        setAssessment(result.data);
       } catch (error) {
         setMsg('Failed to load assessment.');
       }
@@ -43,21 +41,13 @@ const HrReviewSkillMatrix = () => {
     }
 
     try {
-      const token = localStorage.getItem('token');
-      const res = await fetch(`http://localhost:3008/hr/skill-matrix-view/${assessmentId}/decision`, {
-        method: 'PUT',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          status: parseInt(status),
-          hr_comments: hrComments
-        })
-      });
 
-      const result = await res.json();
-      if (!res.ok)
+      const payload={
+        status: parseInt(status),
+        hr_comments: hrComments
+      }
+      const result=await hrDecisionSkillMatrix(assessmentId,payload)
+      if (!result.success)
         throw new Error(result.message || 'Submission failed');
 
       setMsg('Successfully submitted');

@@ -38,6 +38,7 @@ export const initiateAssessmentCycle = async (request, h) => {
         const result = await adminService.initiateAssessmentCycle(quarter, year);
 
         return h.response({
+            success:true,
             message: 'Assessment cycle initiated successfully',
             assessments_created: result.length
         }).code(201);
@@ -48,7 +49,7 @@ export const initiateAssessmentCycle = async (request, h) => {
             : 'Internal server error';
 
         const statusCode = error.message?.includes("already exists") ? 400 : 500;
-        return h.response({ message: errorMessage }).code(statusCode);
+        return h.response({ success:false,message: errorMessage }).code(statusCode);
     }
 };
 
@@ -71,15 +72,14 @@ export const getSkillMatrixForHrReview = async (request, h) => {
 export const skillMatrixApproveHr = async (request, h) => {
     try {
         const hrId = request.auth.employee_id
-
-        const { status, hr_comments } = request.payload;
+        const { status,hr_comments } = request.payload;
         const { assessment_id } = request.params;
 
         const result = await adminService.skillMatrixApproveHr(assessment_id, hrId, status, hr_comments)
-        return h.response({ message: 'HR approval successful' }).code(200);
+        return h.response({ success:true,message: 'HR approval successful' }).code(200);
     } catch (error) {
         console.error("Error approving assessment by HR:", error);
-        return h.response({ message: error.message || "Internal Server Error", error }).code(500);
+        return h.response({success:false,message: error.message || "Internal Server Error", error }).code(500);
     }
 }
 

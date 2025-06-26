@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import '../../styles/initiateassessment.css';
 import Swal from 'sweetalert2';
-
-
+import { initiateAssessment } from '../../services/adminService';
 const quarters = ['1', '2', '3', '4'];
 const currentYear = new Date().getFullYear();
 const yearOptions = [currentYear - 1, currentYear, currentYear + 1];
@@ -20,18 +19,12 @@ const InitiateAssessment = () => {
     setMessage('');
 
     try {
-      const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:3008/assessments/initiate', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({ year, quarter })
-      });
-
-      const data = await response.json();
-      if (response.ok) {
+      const payload = {
+        year,
+        quarter
+      }
+      const data = await initiateAssessment(payload);
+      if (data.success) {
         Swal.fire({
           icon: 'success',
           title: 'Success!',

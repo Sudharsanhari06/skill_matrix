@@ -7,14 +7,15 @@ export const getAllEmployeWithLeadId = async (request, h) => {
 
         const employeeId  = request.auth.employee_id;
         const result = await leadService.getAllEmployeWithLeadId(employeeId);
-        return h.response({ message: 'Successfully get the all employees with lead', result }).code(200)
+        return h.response({success:true, message: 'Successfully get the all employees with lead', result }).code(200)
     } catch (error) {
         console.error("Error fetching the employees", error);
-        return h.response({
+        return h.response({success:false,
             message: 'Internal server error', error
         })
     }
 }
+
 
 export const getSkillMatrixForLeadReview = async (request, h) => {
     try {

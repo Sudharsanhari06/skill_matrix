@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { FaTimes } from "react-icons/fa";
 import '../../styles/createemployee.css';
+import { getAllDesignations, searchEmployee, getAllEmployees, getAllHrames, getAllCategories, getAllTeamNames, getAllRoles } from '../../services/adminService';
+
 
 const CreateEmployee = () => {
+
   const [showForm, setShowForm] = useState(false);
   const [formData, setFormData] = useState({
     employee_name: '',
@@ -12,10 +15,11 @@ const CreateEmployee = () => {
     team_id: '',
     hr_id: '',
     desi_id: '',
+    primary_category_id: '',
+    secondary_category_id: ''
   });
 
-
-  const [searchTerm, setSearchTearm] = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
   const [fillterEmployeeData, setFilterEmployeeData] = useState([]);
   const [roles, setRoles] = useState([]);
   const [teams, setTeams] = useState([]);
@@ -24,74 +28,45 @@ const CreateEmployee = () => {
   const [designations, setDesignations] = useState([]);
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [primaryCategory, setPrimaryCategory] = useState(null);
+  const [secondaryCategory, setSecondaryCategory] = useState(null);
   const [employeeData, setEmployeeData] = useState([]);
   const [message, setMessage] = useState('');
-
-
 
   useEffect(() => {
     const fetchOptions = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const headers = { Authorization: `Bearer ${token}` };
-
-        // Attempt to fetch from APIs first
-        const [rolesRes, teamsRes, catsRes, hrNameRes, employeeRes, desiRes] = await Promise.all([
-          fetch('http://localhost:3008/roles', { headers }),
-          fetch('http://localhost:3008/teams-name', { headers }),
-          fetch('http://localhost:3008/categories', { headers }),
-          fetch('http://localhost:3008/hr-names', { headers }),
-          fetch('http://localhost:3008/employees', { headers }),
-          fetch('http://localhost:3008/designations', { headers }),
-        ]);
-
         const [rolesData, teamsData, catsData, hrNamesData, employeesData, desiData] = await Promise.all([
-          rolesRes.json(),
-          teamsRes.json(),
-          catsRes.json(),
-          hrNameRes.json(),
-          employeeRes.json(),
-          desiRes.json(),
+          getAllRoles(),
+          getAllTeamNames(),
+          getAllCategories(),
+          getAllHrames(),
+          getAllEmployees(),
+          getAllDesignations()
         ]);
-
         setRoles(rolesData.result);
         setHrNames(hrNamesData.result);
         setTeams(teamsData.result);
         setCategories(catsData.result);
         setEmployeeData(employeesData.result);
-        setDesignations(desiData.result); // Set designations
+        setDesignations(desiData.result);
       } catch (err) {
         console.error('Error loading dropdowns:', err);
-
         setMessage('Failed to load some options. Using sample data.');
       }
-    };
 
+    };
     fetchOptions();
   }, []);
 
   useEffect(() => {
-
-    const token = localStorage.getItem('token');
     const delay = setTimeout(() => {
       if (searchTerm.trim !== '') {
-        console.log("searchTerm", searchTerm);
-
-        fetch(`http://localhost:3008/employees/search?name=${searchTerm}`, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        })
-          .then((res) => res.json())
+        searchEmployee(searchTerm)
           .then((data) => {
             setFilterEmployeeData(data.employees);
           })
           .catch((err) => console.error('Error fetching employees:', err))
       }
-      else {
-        // setEmployeeData([]);
-      }
-
     }, 400)
     return () => clearTimeout(delay)
   }, [searchTerm]);
@@ -101,7 +76,6 @@ const CreateEmployee = () => {
   const handleChange = (e) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
-
   const handleCategoryChange = (categoryId) => {
     setSelectedCategories(prev =>
       prev.includes(categoryId)
@@ -122,12 +96,20 @@ const CreateEmployee = () => {
     e.preventDefault();
     setMessage(''); // Clear previous messages
 
-    const token = localStorage.getItem('token');
-    const categoriesPayload = selectedCategories.map(id => ({
-      category_id: id,
-      is_primary: id === primaryCategory ? 1 : 0,
-    }));
+    const categoriesPayload = [];
+    if (primaryCategory) {
+      categoriesPayload.push({
+        category_id: primaryCategory,
+        is_primary: true,
+      });
+    }
 
+    if (secondaryCategory && secondaryCategory !== primaryCategory) {
+      categoriesPayload.push({
+        category_id: secondaryCategory,
+        is_primary: false,
+      });
+    }
     const payload = {
       ...formData,
       categories: categoriesPayload,
@@ -142,37 +124,25 @@ const CreateEmployee = () => {
 
 
     try {
-      const response = await fetch('http://localhost:3008/employee', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(payload),
-      });
-
-      if (response.ok) {
+      const result = await addEmployee(payload)
+      if (result.success) {
         setMessage('Employee created successfully!');
         setShowForm(false);
 
-        setFormData({
-          employee_name: '',
-          email: '',
-          password: '',
-          role_id: '',
-          team_id: '',
-          hr_id: '',
-          desi_id: '',
-        });
+        setFormData(prev => ({
+          ...prev,
+          primary_category_id: '',
+          secondary_category_id: ''
+        }));
         setSelectedCategories([]);
         setPrimaryCategory(null);
         const token = localStorage.getItem('token');
         const employeesRes = await fetch('http://localhost:3008/employees', {
           headers: { Authorization: `Bearer ${token}` }
         });
-        const employeesData = await employeesRes.json();
-        setEmployeeData(employeesData.result || dummyData.employees);
 
+        const employeesData = await employeesRes.json();
+        setEmployeeData(employeesData.result);
       } else {
         const err = await response.json();
         setMessage(`Error: ${err.message || 'Failed to create employee.'}`);
@@ -185,9 +155,15 @@ const CreateEmployee = () => {
 
   return (
     <div className='admin-employee-container'>
-      <button className="btn-create" onClick={() => setShowForm(true)}>
-        Create Employee
-      </button>
+      <div className="employee-container__header">
+        <div className="search-container">
+          <input type="text" placeholder='Enter the Name..' value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+        </div>
+
+        <button className="btn-create" onClick={() => setShowForm(true)}>
+          Create Employee
+        </button>
+      </div>
 
       {message && (
         <div className={`form-message ${message.startsWith('Error') ? 'error' : 'success'}`}>
@@ -204,8 +180,9 @@ const CreateEmployee = () => {
             </button>
             <h2 className="form-title">Create New Employee</h2> {/* Added a title */}
             <form onSubmit={handleSubmit}>
+
               <div className="form-row">
-                <div className="form-group">
+                <div className="form-row__group">
                   <label htmlFor="employee_name">Employee Name</label>
                   <input
                     type="text"
@@ -214,9 +191,10 @@ const CreateEmployee = () => {
                     value={formData.employee_name}
                     onChange={handleChange}
                     required
+                    placeholder='Enter the Name..'
                   />
                 </div>
-                <div className="form-group">
+                <div className="form-row__group">
                   <label htmlFor="email">Email</label>
                   <input
                     type="email"
@@ -225,12 +203,13 @@ const CreateEmployee = () => {
                     value={formData.email}
                     onChange={handleChange}
                     required
+                    placeholder='Enter the Email..'
                   />
                 </div>
               </div>
 
               <div className="form-row">
-                <div className="form-group">
+                <div className="form-row__group">
                   <label htmlFor="password">Password</label>
                   <input
                     type="password"
@@ -239,9 +218,11 @@ const CreateEmployee = () => {
                     value={formData.password}
                     onChange={handleChange}
                     required
+                    placeholder='Enter the Password..'
+
                   />
                 </div>
-                <div className="form-group">
+                <div className="form-row__group">
                   <label htmlFor="role_id">Role</label>
                   <select
                     id="role_id"
@@ -261,7 +242,7 @@ const CreateEmployee = () => {
               </div>
 
               <div className="form-row">
-                <div className="form-group">
+                <div className="form-row__group">
                   <label htmlFor="team_id">Team</label>
                   <select
                     id="team_id"
@@ -278,8 +259,8 @@ const CreateEmployee = () => {
                     ))}
                   </select>
                 </div>
-                <div className="form-group">
-                  <label htmlFor="hr_id">HR (Optional)</label>
+                <div className="form-row__group">
+                  <label htmlFor="hr_id">HR</label>
                   <select
                     id="hr_id"
                     name="hr_id" // Corrected name to hr_id
@@ -297,7 +278,7 @@ const CreateEmployee = () => {
               </div>
 
               <div className="form-row">
-                <div className="form-group">
+                <div className="form-row__group">
                   <label htmlFor="desi_id">Designation (Optional)</label>
                   <select
                     id="desi_id"
@@ -313,12 +294,50 @@ const CreateEmployee = () => {
                     ))}
                   </select>
                 </div>
-                <div className="form-group"></div>
+
               </div>
 
-              <div className="form-group">
-                <label>Categories</label>
-                <div className="categories-container">
+              <div className="form-row">
+                <div className="form-row__group">
+                  <label>Categories</label>
+                  <div className="dropdown-container">
+                    <div className="dropdown-group">
+                      <label>Primary Category:</label>
+                      <select
+                        value={primaryCategory || ''}
+                        onChange={(e) => setPrimaryCategory(Number(e.target.value))}
+                      >
+                        <option value="">-- Select Primary --</option>
+                        {categories.map(cat => (
+                          <option
+                            key={cat.category_id}
+                            value={cat.category_id}
+                            disabled={cat.category_id === secondaryCategory}
+                          >
+                            {cat.category_name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div className="dropdown-group">
+                      <label>Secondary Category:</label>
+                      <select value={secondaryCategory || ''}
+                        onChange={(e) => setSecondaryCategory(Number(e.target.value))}
+                      ><option value="">-- Select Secondary --</option>
+                        {categories.map(cat => (
+                          <option
+                            key={cat.category_id}
+                            value={cat.category_id}
+                            disabled={cat.category_id === primaryCategory}
+                          >{cat.category_name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  {/* <div className="categories-container">
                   {categories.map(cat => (
                     <div key={cat.category_id} className="category-row">
                       <input
@@ -343,6 +362,7 @@ const CreateEmployee = () => {
                       </label>
                     </div>
                   ))}
+                </div> */}
                 </div>
               </div>
 
@@ -354,38 +374,25 @@ const CreateEmployee = () => {
         </>
       )}
 
-      <div className="search-container">
-        <input type="text" placeholder='Enter the Name..' value={searchTerm} onChange={(e) => setSearchTearm(e.target.value)} />
-      </div>
-
       <div className="employee-list-container">
         <h2>All Employees</h2>
         <div className="employee-grid">
-          {employeeData.map((emp) => (
-            <div key={emp.employee_id} className="employee-card">
-              <h3>{emp.employee_name}</h3>
-              <p><strong>Email:</strong> {emp.email}</p>
-              <p><strong>Role:</strong> {emp.role?.role_name || 'N/A'}</p>
-              <p><strong>Team:</strong> {emp.team?.team_name || 'N/A'}</p>
-              <p><strong>ID:</strong> {emp.employee_id}</p>
-            </div>
-          ))}
-        </div>
-
-        <div className="employee-grid">
-          {Array.isArray(searchTerm.length !== 0 ? fillterEmployeeData : employeeData) &&
-
-            (searchTerm.trim() !== '' ? fillterEmployeeData : employeeData).map((emp) =>
-            (
+          {(searchTerm.trim() !== '' ? fillterEmployeeData : employeeData)?.length > 0 ? (
+            (searchTerm.trim() !== '' ? fillterEmployeeData : employeeData).map((emp) => (
               <div key={emp.employee_id} className="employee-card">
                 <h3>{emp.employee_name}</h3>
                 <p><strong>Email:</strong> {emp.email}</p>
                 <p><strong>Role:</strong> {emp.role?.role_name || 'N/A'}</p>
                 <p><strong>Team:</strong> {emp.team?.team_name || 'N/A'}</p>
-                <p><strong>ID:</strong> {emp.employee_id}</p>
               </div>
-            ))}
+            ))
+          ) : (
+            <p className='no-employee'>No employees found</p>
+          )}
         </div>
+
+
+
       </div>
     </div>
   );

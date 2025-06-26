@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/assessment.css';
 import { FaStar } from 'react-icons/fa';
-
+import { useSelector } from 'react-redux';
+import { leadReviewSkillMatrix } from '../services/leadService';
+import { useNavigate } from 'react-router-dom';
 const Assessment = () => {
     const [skills, setSkills] = useState([]);
     const [ratings, setRatings] = useState({});
@@ -10,23 +12,28 @@ const Assessment = () => {
     const [showForm, setShowForm] = useState(false);
     const [message, setMessage] = useState('');
     const [assessmentDone, setAssessmentDone] = useState(false);
+    const [empdata, setEmpData] = useState([]);
+    const navigate=useNavigate();
+
+    const user = useSelector((state) => state.auth.user);
+    const role = user?.role?.role_name;
 
     useEffect(() => {
         const fetchSkills = async () => {
             try {
                 const token = localStorage.getItem('token');
-
-                const res = await fetch('http://localhost:3008/employee/skills/view',{
+                const res = await fetch('http://localhost:3008/employee/skills/view', {
                     headers: {
                         Authorization: `Bearer ${token}`
                     },
                 });
-
                 if (!res.ok) throw new Error('Skill matrix fetch failed');
                 const data = await res.json();
                 console.log("data skills: ", data.skills);
 
-                const allRated = data.skills.status>=1;
+                const result = await leadReviewSkillMatrix()
+                setEmpData(result.data);
+                const allRated = data.skills.status >= 1;
                 console.log("allRated", allRated)
                 setAssessmentDone(allRated);
                 setSkills(data.skills.skills);
@@ -42,7 +49,7 @@ const Assessment = () => {
     const handleRatingChange = (skillId, value) => {
         setRatings({ ...ratings, [skillId]: parseInt(value) });
     };
-    
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         const payload = Object.entries(ratings).map(([skill_id, rating]) => ({
@@ -70,6 +77,11 @@ const Assessment = () => {
         }
     };
 
+
+    const handleReviewClick = (employeeId) => {
+        navigate(`/review/${employeeId}`);
+    };
+
     if (loading) return <p className="loading">Loading skill matrix...</p>;
     if (error) return <p className="error">{error}</p>;
 
@@ -91,7 +103,7 @@ const Assessment = () => {
                     {!showForm && (
                         <div className='start-section'>
                             <button className="start-btn" onClick={() => setShowForm(true)}>
-                                Start Assessment
+                                Start Self Assessment
                             </button>
                         </div>
 
@@ -131,6 +143,26 @@ const Assessment = () => {
                             </button>
                         </form>
                     )}
+                </>
+            )}
+
+            {role == 'lead' && (
+                <>
+                <h2>Review Team Members</h2>
+                <div className="card-container">
+                    {empdata.map((item) => (
+                        <div className="card" key={item.assessment_id}>
+                            <h3 className="employee-name">{item.employee.name}</h3>
+                            <p className="assessment-id">Assessment ID: {item.assessment_id}</p>
+                            <button
+                                className="review-button"
+                                onClick={() => handleReviewClick(item.employee.id)}
+                            >
+                                Review Assessment
+                            </button>
+                        </div>
+                    ))}
+                </div>
                 </>
             )}
 

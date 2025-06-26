@@ -8,7 +8,7 @@ const SkillDetailsPanel = ({ skill }) => {
         <h3>{skill.skill_name}</h3>
         {achieved ? (
           <>
-            <p className="success">🎉 You have achieved the expected level!</p>
+            <p className="success"> You have achieved the expected level!</p>
             <h4>Improve to next level:</h4>
             <p>{skill.guidance_to_next}</p>
             <a href={skill.resource_to_next} target="_blank" rel="noreferrer">Learn More</a>

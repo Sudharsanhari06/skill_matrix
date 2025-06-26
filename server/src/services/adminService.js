@@ -37,6 +37,7 @@ export const initiateAssessmentCycle = async (quarter, year) => {
     const existingAssessments = await assessmentRepo.find({
         where: { quarter, year }
     });
+    
     if (existingAssessments.length > 0) {
         throw new Error(`Assessment cycle for Q${quarter}, ${year} already exists.`);
     }

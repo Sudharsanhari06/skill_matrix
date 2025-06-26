@@ -49,7 +49,7 @@ const Sidebar = () => {
 
     return (
         <div className="sidebar">
-            <h2 className="sidebar-title">Skill Matrix</h2>
+            {/* <h2 className="sidebar-title">Skill Matrix</h2> */}
             <nav className="nav-links">
                 {[...commonLinks, ...(roleBasedLinks[role] || [])].map((link) => (
                     <NavLink
